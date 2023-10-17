@@ -27,29 +27,30 @@
 # @license GPL-2.0-only <https://spdx.org/licenses/GPL-2.0-only.html>
 #===============================================================================
 
-cmake_minimum_required(VERSION 3.10.2)
-set(CMAKE_VERBOSE_MAKEFILE ON)
+# Create Radamsa library
+add_library(Radamsa SHARED
+  src/common/mutator/byteMutations.cpp
+  src/common/mutator/radamsaMutator.cpp
+  src/common/mutator/lineMutations.cpp
+)
 
-# Specify project related variables.
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_CXX_COMPILER g++)
+# Build-time dependencies for Radamsa
+link_directories(Radamsa PRIVATE
+)
 
-project(VmfExtension VERSION 1.0 LANGUAGES CXX)
+# Build-time dependencies for Radamsa
+target_link_libraries(Radamsa PRIVATE
+)
 
-# Check that VMF_INSTALL directory is properly defined, exit with error if not
-if (NOT IS_DIRECTORY ${VMF_INSTALL})
-  message( FATAL_ERROR "CMake variable VMF_INSTALL must be defined as full path to a VMF install tree, please use cmake -DVMF_INSTALL=/full/path/to/VMF" )
-endif()
+# Build-time dependencies for Radamsa
+target_include_directories(Radamsa PRIVATE
+  ${VMF_INSTALL}/include
+  ${VMF_INSTALL}/include/vmf
+  ${VMF_INSTALL}/include/plog
+  ${PROJECT_SOURCE_DIR}/src/module
+)
 
-# Bring in VMF support variables and utility functions
-list(APPEND CMAKE_MODULE_PATH "${VMF_INSTALL}/cmake")
-include(vmf_imports)
-include(vmf)
-
-# ---- TAILOR SPECIFIC EXTENSION PACKAGES HERE ----
-
-# Add in extension package directories
-add_subdirectory(${PROJECT_SOURCE_DIR}/Radamsa)
-add_subdirectory(${PROJECT_SOURCE_DIR}/SamplePackage)
+# Install Radamsa library in VMF plugins directory
+install(TARGETS Radamsa
+  LIBRARY DESTINATION "${VMF_INSTALL}/plugins")
 
