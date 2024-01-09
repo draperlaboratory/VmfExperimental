@@ -27,30 +27,5 @@
 # @license GPL-2.0-only <https://spdx.org/licenses/GPL-2.0-only.html>
 #===============================================================================
 
-# Create Radamsa library
-add_library(Radamsa SHARED
-  src/common/mutator/byteMutations.cpp
-  src/common/mutator/radamsaMutator.cpp
-  src/common/mutator/lineMutations.cpp
-)
-
-# Build-time dependencies for Radamsa
-link_directories(Radamsa PRIVATE
-)
-
-# Build-time dependencies for Radamsa
-target_link_libraries(Radamsa PRIVATE
-)
-
-# Build-time dependencies for Radamsa
-target_include_directories(Radamsa PRIVATE
-  ${VMF_INSTALL}/include
-  ${VMF_INSTALL}/include/vmf
-  ${VMF_INSTALL}/include/plog
-  ${PROJECT_SOURCE_DIR}/src/module
-)
-
-# Install Radamsa library in VMF plugins directory
-install(TARGETS Radamsa
-  LIBRARY DESTINATION "${VMF_INSTALL}/plugins")
+add_subdirectory(modules)
 

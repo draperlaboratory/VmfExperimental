@@ -29,7 +29,7 @@
 
 # Create SampleModule library
 add_library(SampleModule SHARED
-  src/module/MyMutator.cpp
+  common/mutator/MyMutator.cpp
 )
 
 # Build-time dependencies for SampleModule

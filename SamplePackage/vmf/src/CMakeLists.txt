@@ -27,29 +27,5 @@
 # @license GPL-2.0-only <https://spdx.org/licenses/GPL-2.0-only.html>
 #===============================================================================
 
-cmake_minimum_required(VERSION 3.10.2)
-set(CMAKE_VERBOSE_MAKEFILE ON)
-
-# Specify project related variables.
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_CXX_COMPILER g++)
-
-project(VmfExtension VERSION 1.0 LANGUAGES CXX)
-
-# Check that VMF_INSTALL directory is properly defined, exit with error if not
-if (NOT IS_DIRECTORY ${VMF_INSTALL})
-  message( FATAL_ERROR "CMake variable VMF_INSTALL must be defined as full path to a VMF install tree, please use cmake -DVMF_INSTALL=/full/path/to/VMF" )
-endif()
-
-# Bring in VMF support variables and utility functions
-list(APPEND CMAKE_MODULE_PATH "${VMF_INSTALL}/cmake")
-include(vmf_imports)
-include(vmf)
-
-# ---- TAILOR SPECIFIC EXTENSION PACKAGES HERE ----
-
-# Add in extension package directories
-add_subdirectory(${PROJECT_SOURCE_DIR}/Radamsa/vmf/src)
-add_subdirectory(${PROJECT_SOURCE_DIR}/SamplePackage/vmf/src)
+add_subdirectory(modules)
 
