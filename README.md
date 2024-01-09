@@ -6,9 +6,11 @@ This repository is a collection of VMF module packages (sets of related modules)
 Top-level directories are individual packages. Each package contains source code for one or more VMF
 modules along with associated data, tests, and documentation.
 
-Within each package we suggest the following directory hierarchy for source code:
-* Second-level directory identifies the platform(s) the modules will run on (linux, windows, common, etc.)
-* Third-level directory identifies the specific module type
+Within each package we suggest using the same directory hierarchy as is used in the main 
+VaderModularFuzzer repository:
+* All source code is under `vmf/src/modules/`
+* Next-level directory identifies the platform(s) the modules will run on (linux, windows, common, etc.)
+* Lowest-level directory identifies the specific module type
 
 ```
 /
@@ -16,7 +18,7 @@ Within each package we suggest the following directory hierarchy for source code
     |-- data
     |-- docs
     |-- test
-    |-- src
+    |-- vmf/src/modules
         |-- common
 	    |-- mutator
 	    |-- output
