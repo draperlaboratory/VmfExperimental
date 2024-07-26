@@ -63,7 +63,6 @@ RUN set -ex \
     && mkdir build \
     && cd build \
     && cmake -DVMF_INSTALL=/usr/local .. \
-    && ls -la /usr/local/include \
     && make && make install \
     && set +ex
 
