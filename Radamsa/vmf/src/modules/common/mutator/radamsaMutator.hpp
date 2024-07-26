@@ -1,7 +1,7 @@
 /* =============================================================================
  * Vader Modular Fuzzer
  * Copyright (c) 2021-2023 The Charles Stark Draper Laboratory, Inc.
- * <vader@draper.com>
+ * <vmf@draper.com>
  *
  * Effort sponsored by the U.S. Government under Other Transaction number
  * W9124P-19-9-0001 between AMTC and the Government. The U.S. Government
@@ -37,7 +37,7 @@
 #include "lineMutations.hpp"
 
 
-namespace vader::modules::radamsa
+namespace vmf::modules::radamsa
 {
 /**
  * @brief This module is draws heavily upon the libAFL mutator.c
@@ -67,8 +67,8 @@ namespace vader::modules::radamsa
  *  a lot of features that AFL++ already provides.
  */
 class RadamsaMutator: public MutatorModule,
-                      public vader::radamsa::mutations::ByteMutations,
-                      public vader::radamsa::mutations::LineMutations
+                      public vmf::radamsa::mutations::ByteMutations,
+                      public vmf::radamsa::mutations::LineMutations
 {
 public:
     enum class AlgorithmType : uint8_t
@@ -94,8 +94,8 @@ public:
     virtual ~RadamsaMutator() = default;
 
     RadamsaMutator(std::string name) noexcept : MutatorModule{name},
-                                                vader::radamsa::mutations::ByteMutations{RANDOM_NUMBER_GENERATOR_},
-                                                vader::radamsa::mutations::LineMutations{RANDOM_NUMBER_GENERATOR_}
+                                                vmf::radamsa::mutations::ByteMutations{RANDOM_NUMBER_GENERATOR_},
+                                                vmf::radamsa::mutations::LineMutations{RANDOM_NUMBER_GENERATOR_}
                                                 
     {}
 
@@ -106,7 +106,7 @@ public:
 
     virtual void registerStorageNeeds(StorageRegistry& registry);
     
-    virtual StorageEntry* createTestCase(StorageModule& storage, StorageEntry* baseEntry);
+    virtual void mutateTestCase(StorageModule& storage, StorageEntry* baseEntry, StorageEntry* newEntry, int testCaseKey);
 
     static Module* build(std::string name);
 

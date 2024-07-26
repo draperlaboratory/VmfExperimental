@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <iostream>
 
-namespace vader::radamsa::mutations
+namespace vmf::radamsa::mutations
 {
 class MutationBase
 {

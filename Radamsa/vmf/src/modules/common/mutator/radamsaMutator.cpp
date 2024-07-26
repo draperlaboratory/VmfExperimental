@@ -1,7 +1,7 @@
 /* =============================================================================
  * Vader Modular Fuzzer
  * Copyright (c) 2021-2023 The Charles Stark Draper Laboratory, Inc.
- * <vader@draper.com>
+ * <vmf@draper.com>
  *
  * Effort sponsored by the U.S. Government under Other Transaction number
  * W9124P-19-9-0001 between AMTC and the Government. The U.S. Government
@@ -52,14 +52,14 @@
 #include "ModuleFactory.hpp"
 #include "radamsaMutator.hpp"
 
-namespace vader
+namespace vmf
 {
-REGISTER_MODULE(vader::modules::radamsa::RadamsaMutator);
+REGISTER_MODULE(vmf::modules::radamsa::RadamsaMutator);
 }
 
-vader::Module* vader::modules::radamsa::RadamsaMutator::build(std::string name) { return new RadamsaMutator(name); }
+vmf::Module* vmf::modules::radamsa::RadamsaMutator::build(std::string name) { return new RadamsaMutator(name); }
 
-void vader::modules::radamsa::RadamsaMutator::SetAlgorithmType(const AlgorithmType algorithmType)
+void vmf::modules::radamsa::RadamsaMutator::SetAlgorithmType(const AlgorithmType algorithmType)
 {
     switch(algorithmType)
     {
@@ -91,7 +91,7 @@ void vader::modules::radamsa::RadamsaMutator::SetAlgorithmType(const AlgorithmTy
     }
 }
 
-void vader::modules::radamsa::RadamsaMutator::registerStorageNeeds(StorageRegistry& registry)
+void vmf::modules::radamsa::RadamsaMutator::registerStorageNeeds(StorageRegistry& registry)
 {
     testCaseKey_ = registry.registerKey(
                                 "TEST_CASE",
@@ -103,7 +103,7 @@ void vader::modules::radamsa::RadamsaMutator::registerStorageNeeds(StorageRegist
                                 StorageRegistry::READ_ONLY);
 }
 
-vader::StorageEntry* vader::modules::radamsa::RadamsaMutator::createTestCase(StorageModule& storage, StorageEntry* baseEntry)
+void vmf::modules::radamsa::RadamsaMutator::mutateTestCase(StorageModule& storage, StorageEntry* baseEntry, StorageEntry* newEntry, int testCaseKey)
 {
     if (baseEntry == nullptr)
         throw RuntimeException("RadamsaMutator mutate called with null base entry", RuntimeException::OTHER);
@@ -115,7 +115,7 @@ vader::StorageEntry* vader::modules::radamsa::RadamsaMutator::createTestCase(Sto
     if(size <= 0)
         throw RuntimeException("RadamsaMutator mutate called with zero sized buffer", RuntimeException::USAGE_ERROR);
 
-    StorageEntry* newEntry{storage.createNewEntry()};
+    
 
     switch(algorithmType_)
     {
@@ -181,10 +181,10 @@ vader::StorageEntry* vader::modules::radamsa::RadamsaMutator::createTestCase(Sto
         break;
     }
 
-    return newEntry;
+    
 }
 
-vader::modules::radamsa::RadamsaMutator::AlgorithmType vader::modules::radamsa::RadamsaMutator::stringToType(std::string type)
+vmf::modules::radamsa::RadamsaMutator::AlgorithmType vmf::modules::radamsa::RadamsaMutator::stringToType(std::string type)
 {
     if(type.compare("ByteMutations_DropByte") == 0)
         return AlgorithmType::ByteMutations_DropByte;

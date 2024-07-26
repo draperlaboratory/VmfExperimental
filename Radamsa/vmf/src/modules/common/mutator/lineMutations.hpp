@@ -1,7 +1,7 @@
 /* =============================================================================
  * Vader Modular Fuzzer
  * Copyright (c) 2021-2023 The Charles Stark Draper Laboratory, Inc.
- * <vader@draper.com>
+ * <vmf@draper.com>
  *
  * Effort sponsored by the U.S. Government under Other Transaction number
  * W9124P-19-9-0001 between AMTC and the Government. The U.S. Government
@@ -43,7 +43,7 @@
 #include "RuntimeException.hpp"
 
 
-namespace vader::radamsa::mutations
+namespace vmf::radamsa::mutations
 {
 /**
  * @brief This module is draws heavily upon the libAFL mutator.c
@@ -72,7 +72,7 @@ namespace vader::radamsa::mutations
  *  customized fuzzers for a specific target while taking advantage of
  *  a lot of features that AFL++ already provides.
  */
-class LineMutations: public vader::radamsa::mutations::MutationBase
+class LineMutations: public vmf::radamsa::mutations::MutationBase
 {
 public:
     struct Line

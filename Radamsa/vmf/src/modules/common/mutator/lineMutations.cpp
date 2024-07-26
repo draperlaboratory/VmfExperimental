@@ -1,7 +1,7 @@
 /* =============================================================================
  * Vader Modular Fuzzer
  * Copyright (c) 2021-2023 The Charles Stark Draper Laboratory, Inc.
- * <vader@draper.com>
+ * <vmf@draper.com>
  *
  * Effort sponsored by the U.S. Government under Other Transaction number
  * W9124P-19-9-0001 between AMTC and the Government. The U.S. Government
@@ -55,7 +55,7 @@
 #include "lineMutations.hpp"
 #include "Logging.hpp"
 
-vader::radamsa::mutations::LineMutations::Line vader::radamsa::mutations::LineMutations::GetLineData(
+vmf::radamsa::mutations::LineMutations::Line vmf::radamsa::mutations::LineMutations::GetLineData(
                                                                                                 const char* const buffer,
                                                                                                 const size_t size,
                                                                                                 const size_t lineIndex,
@@ -118,7 +118,7 @@ vader::radamsa::mutations::LineMutations::Line vader::radamsa::mutations::LineMu
     return lineData;
 }
 
-size_t vader::radamsa::mutations::LineMutations::GetNumberOfLinesAfterIndex(
+size_t vmf::radamsa::mutations::LineMutations::GetNumberOfLinesAfterIndex(
                                                                     const char* const buffer,
                                                                     const size_t size,
                                                                     const size_t index)
@@ -143,7 +143,7 @@ size_t vader::radamsa::mutations::LineMutations::GetNumberOfLinesAfterIndex(
     return ++numberOfLines;
 }
 
-bool vader::radamsa::mutations::LineMutations::IsBinarish(
+bool vmf::radamsa::mutations::LineMutations::IsBinarish(
                                                     const char* const buffer,
                                                     const size_t size)
 {
@@ -174,7 +174,7 @@ bool vader::radamsa::mutations::LineMutations::IsBinarish(
     return false;
 }
 
-void vader::radamsa::mutations::LineMutations::DeleteLine(
+void vmf::radamsa::mutations::LineMutations::DeleteLine(
                                                     StorageEntry* newEntry,
                                                     const size_t originalSize,
                                                     const char* originalBuffer,
@@ -258,7 +258,7 @@ void vader::radamsa::mutations::LineMutations::DeleteLine(
     }
 }
 
-void vader::radamsa::mutations::LineMutations::DeleteSequentialLines(
+void vmf::radamsa::mutations::LineMutations::DeleteSequentialLines(
                                                                 StorageEntry* newEntry,
                                                                 const size_t originalSize,
                                                                 const char* originalBuffer,
@@ -353,7 +353,7 @@ void vader::radamsa::mutations::LineMutations::DeleteSequentialLines(
     }
 }
 
-void vader::radamsa::mutations::LineMutations::DuplicateLine(
+void vmf::radamsa::mutations::LineMutations::DuplicateLine(
                                                         StorageEntry* newEntry,
                                                         const size_t originalSize,
                                                         const char* originalBuffer,
@@ -458,7 +458,7 @@ void vader::radamsa::mutations::LineMutations::DuplicateLine(
     }
 }
 
-void vader::radamsa::mutations::LineMutations::CopyLineCloseBy(
+void vmf::radamsa::mutations::LineMutations::CopyLineCloseBy(
                                                         StorageEntry* newEntry,
                                                         const size_t originalSize,
                                                         const char* originalBuffer,
@@ -555,7 +555,7 @@ void vader::radamsa::mutations::LineMutations::CopyLineCloseBy(
     }
 }
 
-void vader::radamsa::mutations::LineMutations::RepeatLine(
+void vmf::radamsa::mutations::LineMutations::RepeatLine(
                                                     StorageEntry* newEntry,
                                                     const size_t originalSize,
                                                     const char* originalBuffer,
@@ -648,7 +648,7 @@ void vader::radamsa::mutations::LineMutations::RepeatLine(
     }
 }
 
-void vader::radamsa::mutations::LineMutations::SwapLine(
+void vmf::radamsa::mutations::LineMutations::SwapLine(
                                                     StorageEntry* newEntry,
                                                     const size_t originalSize,
                                                     const char* originalBuffer,
@@ -778,7 +778,7 @@ void vader::radamsa::mutations::LineMutations::SwapLine(
     }
 }
 
-size_t vader::radamsa::mutations::LineMutations::GetRandomLogValue(const size_t maximumValue)
+size_t vmf::radamsa::mutations::LineMutations::GetRandomLogValue(const size_t maximumValue)
 {
     constexpr size_t minimumValue{2u};
 
@@ -788,7 +788,7 @@ size_t vader::radamsa::mutations::LineMutations::GetRandomLogValue(const size_t 
     return GetRandomN_Bit(GetRandomValueWithinBounds(0u, maximumValue - minimumValue) + minimumValue);
 }
 
-size_t vader::radamsa::mutations::LineMutations::GetRandomN_Bit(const size_t n)
+size_t vmf::radamsa::mutations::LineMutations::GetRandomN_Bit(const size_t n)
 {
     const size_t highValue{(n - 1u) << 1u};
     const size_t randomValue{GetRandomValueWithinBounds(0u, highValue)};
@@ -797,7 +797,7 @@ size_t vader::radamsa::mutations::LineMutations::GetRandomN_Bit(const size_t n)
     return nBitValue;
 }
 
-void vader::radamsa::mutations::LineMutations::PermuteLine(
+void vmf::radamsa::mutations::LineMutations::PermuteLine(
                                                         StorageEntry* newEntry,
                                                         const size_t originalSize,
                                                         const char* originalBuffer,

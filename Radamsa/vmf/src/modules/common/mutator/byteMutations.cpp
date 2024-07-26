@@ -1,7 +1,7 @@
 /* =============================================================================
  * Vader Modular Fuzzer
  * Copyright (c) 2021-2023 The Charles Stark Draper Laboratory, Inc.
- * <vader@draper.com>
+ * <vmf@draper.com>
  *
  * Effort sponsored by the U.S. Government under Other Transaction number
  * W9124P-19-9-0001 between AMTC and the Government. The U.S. Government
@@ -50,7 +50,7 @@
 
 #include "byteMutations.hpp"
 
-void vader::radamsa::mutations::ByteMutations::DropByte(
+void vmf::radamsa::mutations::ByteMutations::DropByte(
                                                     StorageEntry* newEntry,
                                                     const size_t originalSize,
                                                     const char* originalBuffer,
@@ -106,7 +106,7 @@ void vader::radamsa::mutations::ByteMutations::DropByte(
     }
 }
 
-void vader::radamsa::mutations::ByteMutations::FlipByte(
+void vmf::radamsa::mutations::ByteMutations::FlipByte(
                                                     StorageEntry* newEntry,
                                                     const size_t originalSize,
                                                     const char* originalBuffer,
@@ -161,7 +161,7 @@ void vader::radamsa::mutations::ByteMutations::FlipByte(
     newBuffer[randomIndexToFlip] ^= randomMaskedBit;
 }
 
-void vader::radamsa::mutations::ByteMutations::InsertByte(
+void vmf::radamsa::mutations::ByteMutations::InsertByte(
                                                     StorageEntry* newEntry,
                                                     const size_t originalSize,
                                                     const char* originalBuffer,
@@ -217,7 +217,7 @@ void vader::radamsa::mutations::ByteMutations::InsertByte(
     }
 }
 
-void vader::radamsa::mutations::ByteMutations::RepeatByte(
+void vmf::radamsa::mutations::ByteMutations::RepeatByte(
                                                     StorageEntry* newEntry,
                                                     const size_t originalSize,
                                                     const char* originalBuffer,
@@ -281,7 +281,7 @@ void vader::radamsa::mutations::ByteMutations::RepeatByte(
     }
 }
 
-void vader::radamsa::mutations::ByteMutations::PermuteByte(
+void vmf::radamsa::mutations::ByteMutations::PermuteByte(
                                                     StorageEntry* newEntry,
                                                     const size_t originalSize,
                                                     const char* originalBuffer,
@@ -337,7 +337,7 @@ void vader::radamsa::mutations::ByteMutations::PermuteByte(
     }
 }
 
-void vader::radamsa::mutations::ByteMutations::IncrementByte(
+void vmf::radamsa::mutations::ByteMutations::IncrementByte(
                                                         StorageEntry* newEntry,
                                                         const size_t originalSize,
                                                         const char* originalBuffer,
@@ -383,7 +383,7 @@ void vader::radamsa::mutations::ByteMutations::IncrementByte(
     newBuffer[randomIndexToIncrement] = static_cast<char>((originalBuffer[randomIndexToIncrement] + 0x01u) % std::numeric_limits<char>::max());
 }
 
-void vader::radamsa::mutations::ByteMutations::DecrementByte(
+void vmf::radamsa::mutations::ByteMutations::DecrementByte(
                                                         StorageEntry* newEntry,
                                                         const size_t originalSize,
                                                         const char* originalBuffer,
@@ -429,7 +429,7 @@ void vader::radamsa::mutations::ByteMutations::DecrementByte(
     newBuffer[randomIndexToDecrement] = static_cast<char>((originalBuffer[randomIndexToDecrement] - 0x01u) % std::numeric_limits<char>::max());
 }
 
-void vader::radamsa::mutations::ByteMutations::RandomizeByte(
+void vmf::radamsa::mutations::ByteMutations::RandomizeByte(
                                                         StorageEntry* newEntry,
                                                         const size_t originalSize,
                                                         const char* originalBuffer,
