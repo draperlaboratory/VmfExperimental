@@ -64,7 +64,7 @@ void RadamsaFlipByteMutator::init(ConfigInterface& config)
  *
  * @param name The of the name module
  */
-RadamsaFlipByteMutator::RadamsaFlipByteMutator(std::string name) : MutatorModule(name), MutationBase(rand)
+RadamsaFlipByteMutator::RadamsaFlipByteMutator(std::string name) : MutatorModule(name)
 {
     rand.randInit();
 }
@@ -124,17 +124,18 @@ void RadamsaFlipByteMutator::mutateTestCase(StorageModule& storage, StorageEntry
     const size_t maximumRandomIndexValue{originalSize - minimumSeedIndex};
     const size_t randomIndexToFlip{
                             std::clamp(
-                                    GetRandomValueWithinBounds(
-                                                        lower,
-                                                        maximumRandomIndexValue) + minimumSeedIndex,
-                                                        lower,
-                                                        upper)};
+                                    rand->randBetween(
+                                                lower,
+                                                maximumRandomIndexValue
+                                    ) + minimumSeedIndex,
+                                    lower,
+                                    upper)};
 
     // Select a random bit to flip from the random byte.
     // When computing the random bit shift,
     // we add 1 so that a maximum number of 8 bit shift operations can be performed against a char containing the value 0x01.
 
-    const size_t randomBitShift{GetRandomValueWithinBounds(0u, std::numeric_limits<char>::digits + 1u)};
+    const size_t randomBitShift{rand->randBetween(0u, std::numeric_limits<char>::digits + 1u)};
     const char randomMaskedBit{static_cast<char>(0x01u << randomBitShift)};
 
     // Flip the random byte by performing an XOR operation with a random masked bit.
