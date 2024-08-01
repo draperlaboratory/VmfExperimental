@@ -39,7 +39,7 @@ namespace vmf
 /**
  *
  */
-class RadamsaFlipByteMutator: public MutatorModule
+class RadamsaFlipByteMutator: public MutatorModule, public MutationBase
 {
     public:
 
