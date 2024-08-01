@@ -45,7 +45,7 @@ class RadamsaFlipByteMutator: public MutatorModule
         static Module* build(std::string name);
         virtual void init(ConfigInterface& config);
 
-        RadamsaFlipByteMutator();
+        RadamsaFlipByteMutator(std::string name);
         virtual ~RadamsaFlipByteMutator();
         virtual void registerStorageNeeds(StorageRegistry& registry);
         virtual void mutateTestCase(StorageModule& storage, StorageEntry* baseEntry, StorageEntry* newEntry, int testCaseKey);

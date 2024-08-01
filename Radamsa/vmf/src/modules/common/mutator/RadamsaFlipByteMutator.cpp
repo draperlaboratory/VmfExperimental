@@ -64,8 +64,7 @@ void RadamsaFlipByteMutator::init(ConfigInterface& config)
  *
  * @param name The of the name module
  */
-RadamsaFlipByteMutator::RadamsaFlipByteMutator(std::string name) : 
-    MutatorModule(name)
+RadamsaFlipByteMutator::RadamsaFlipByteMutator(std::string name) : MutatorModule(name)
 {
     rand.randInit();
 }
@@ -95,8 +94,9 @@ void RadamsaFlipByteMutator::mutateTestCase(StorageModule& storage, StorageEntry
     // Consume the original buffer by flipping a byte and appending a null-terminator to the end.
 
     constexpr size_t minimumSize{1u};
+    const size_t minimumSeedIndex{0u};
     int originalSize = baseEntry->getBufferSize(testCaseKey);
-    char* originalBuffer = baseEntry->getBuffer(testCaseKey);
+    char* originalBuffer = baseEntry->getBufferPointer(testCaseKey);
 
     if (originalSize < minimumSize)
         throw RuntimeException{"The buffer's minimum size must be greater than or equal to 1", RuntimeException::USAGE_ERROR};
