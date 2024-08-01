@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <iostream>
 
-namespace vmf::radamsa::mutations
+namespace vmf
 {
 class MutationBase
 {
