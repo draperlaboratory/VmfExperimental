@@ -64,7 +64,7 @@ void RadamsaFlipByteMutator::init(ConfigInterface& config)
  *
  * @param name The of the name module
  */
-RadamsaFlipByteMutator::RadamsaFlipByteMutator(std::string name) : MutatorModule(name)
+RadamsaFlipByteMutator::RadamsaFlipByteMutator(std::string name) : MutatorModule(name), MutationBase(rand)
 {
     rand.randInit();
 }
