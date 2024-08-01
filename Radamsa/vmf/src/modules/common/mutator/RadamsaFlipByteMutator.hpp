@@ -31,6 +31,7 @@
 #include "MutatorModule.hpp"
 #include "StorageEntry.hpp"
 #include "RuntimeException.hpp"
+#include "mutationBase.hpp"
 #include "VmfRand.hpp"
 
 namespace vmf
