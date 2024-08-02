@@ -32,6 +32,7 @@ add_library(Radamsa SHARED
 #  common/mutator/byteMutations.cpp
 #  common/mutator/radamsaMutator.cpp
 #  common/mutator/lineMutations.cpp
+  common/mutator/RadamsaDropByteMutator.cpp
   common/mutator/RadamsaFlipByteMutator.cpp
 )
 
