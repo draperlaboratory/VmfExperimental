@@ -35,6 +35,7 @@ add_library(Radamsa SHARED
   common/mutator/RadamsaDropByteMutator.cpp
   common/mutator/RadamsaFlipByteMutator.cpp
   common/mutator/RadamsaInsertByteMutator.cpp
+  common/mutator/RadamsaRepeatByteMutator.cpp
 )
 
 # Build-time dependencies for Radamsa

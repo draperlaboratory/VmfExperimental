@@ -66,4 +66,14 @@ RUN set -ex \
     && make && make install \
     && set +ex
 
+# Create experimental config file
+RUN set -ex \
+    && cd /usr/local/config \
+    && cp basicModules.yaml experimentalModules.yaml \
+    && echo '\n        - className: RadamsaDropByteMutator' >> experimentalModules.yaml \
+    && echo '        - className: RadamsaFlipByteMutator' >> experimentalModules.yaml \
+    && echo '        - className: RadamsaInsertByteMutator' >> experimentalModules.yaml \
+    && echo '        - className: RadamsaRepeatByteMutator' >> experimentalModules.yaml \
+    && set +ex
+
 CMD bash
