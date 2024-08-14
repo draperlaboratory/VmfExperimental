@@ -4,7 +4,7 @@
 #include <random>
 #include <algorithm>
 #include <iostream>
-#include <random>
+#include "VmfRand.hpp"
 
 namespace vmf
 {
@@ -12,9 +12,8 @@ class MutationBase
 {
 public:
 
-    static size_t GetRandomByteRepetitionLength() noexcept
+    static size_t GetRandomByteRepetitionLength(VmfRand& rand) noexcept
     {
-        rand.randInit();
         constexpr size_t MINIMUM_UPPER_LIMIT{0x2u};
         constexpr size_t MAXIMUM_UPPER_LIMIT{0x20000u};
 
