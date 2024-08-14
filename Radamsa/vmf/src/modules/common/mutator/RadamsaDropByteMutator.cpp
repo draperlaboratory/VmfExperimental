@@ -95,7 +95,7 @@ void RadamsaDropByteMutator::mutateTestCase(StorageModule& storage, StorageEntry
 
     constexpr size_t minimumSize{1u};
     const size_t minimumSeedIndex{0u};
-    int originalSize = baseEntry->getBufferSize(testCaseKey);
+    const size_t originalSize = baseEntry->getBufferSize(testCaseKey);
     char* originalBuffer = baseEntry->getBufferPointer(testCaseKey);
 
     if (originalSize < minimumSize)
