@@ -74,6 +74,7 @@ RUN set -ex \
     && echo '        - className: RadamsaFlipByteMutator' >> experimentalModules.yaml \
     && echo '        - className: RadamsaInsertByteMutator' >> experimentalModules.yaml \
     && echo '        - className: RadamsaRepeatByteMutator' >> experimentalModules.yaml \
+    && echo '        - className: RadamsaPermuteByteMutator' >> experimentalModules.yaml \
     && set +ex
 
 CMD bash
