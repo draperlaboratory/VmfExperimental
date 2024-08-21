@@ -39,6 +39,7 @@ add_library(Radamsa SHARED
   common/mutator/RadamsaPermuteByteMutator.cpp
   common/mutator/RadamsaIncrementByteMutator.cpp
   common/mutator/RadamsaDecrementByteMutator.cpp
+  common/mutator/RadamsaRandomizeByteMutator.cpp
 )
 
 # Build-time dependencies for Radamsa
