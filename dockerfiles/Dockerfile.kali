@@ -55,11 +55,11 @@ RUN set -ex \
     && make install \
     && set +ex
     
-# Clone, build, install VMFExperimental
+# Copy, build, install VmfExperimental
+COPY . /usr/local/src/VmfExperimental
+
 RUN set -ex \
-    && cd /usr/local/src/ \
-    && git clone --depth 1 https://github.com/crusoe112/VmfExperimental.git VmfExperimental\
-    && cd VmfExperimental \
+    && cd /usr/local/src/VmfExperimental \
     && mkdir build \
     && cd build \
     && cmake -DVMF_INSTALL=/usr/local .. \
@@ -68,12 +68,8 @@ RUN set -ex \
 
 # Create experimental config file
 RUN set -ex \
-    && cd /usr/local/config \
-    && cp basicModules.yaml experimentalModules.yaml \
-    && echo '\n        - className: RadamsaDropByteMutator' >> experimentalModules.yaml \
-    && echo '        - className: RadamsaFlipByteMutator' >> experimentalModules.yaml \
-    && echo '        - className: RadamsaInsertByteMutator' >> experimentalModules.yaml \
-    && echo '        - className: RadamsaRepeatByteMutator' >> experimentalModules.yaml \
+    && cd /usr/local/test/config \
+    && cp /usr/local/src/VmfExperimental/Radamsa/test/config/experimentalModules.yaml /usr/local/test/config/ \
     && set +ex
 
 CMD bash
