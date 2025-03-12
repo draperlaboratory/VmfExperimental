@@ -18,11 +18,8 @@ VaderModularFuzzer repository:
     |-- data
     |-- docs
     |-- test
-    |-- vmf/src/modules
-        |-- common
+    |-- vmf/src/modules/common
 	    |-- mutator
-	    |-- output
-    |-- submodules
 ```
 
 ## Building and installing experimental module packages

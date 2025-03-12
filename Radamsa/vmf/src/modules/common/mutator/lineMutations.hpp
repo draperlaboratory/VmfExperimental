@@ -1,7 +1,7 @@
 /* =============================================================================
  * Vader Modular Fuzzer
- * Copyright (c) 2021-2023 The Charles Stark Draper Laboratory, Inc.
- * <vader@draper.com>
+ * Copyright (c) 2021-2024 The Charles Stark Draper Laboratory, Inc.
+ * <vmf@draper.com>
  *
  * Effort sponsored by the U.S. Government under Other Transaction number
  * W9124P-19-9-0001 between AMTC and the Government. The U.S. Government
@@ -13,19 +13,18 @@
  * or endorsements, either expressed or implied, of the U.S. Government.
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
+ * it under the terms of the GNU General Public License version 2 (only) as 
+ * published by the Free Software Foundation.
+ *  
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *
+ *  
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- * @license GPL-3.0-or-later <https://spdx.org/licenses/GPL-3.0-or-later>
+ *  
+ * @license GPL-2.0-only <https://spdx.org/licenses/GPL-2.0-only.html>
  * ===========================================================================*/
 #pragma once
 
@@ -43,13 +42,13 @@
 #include "RuntimeException.hpp"
 
 
-namespace vader::radamsa::mutations
+namespace vmf::radamsa::mutations
 {
 /**
  * @brief This module is draws heavily upon the libAFL mutator.c
  * 
  * Uses the specified AFL-style mutation algorithm to mutate the provided
- * input.  createTestCase is the main mutation method.
+ * input.  mutateTestCase is the main mutation method.
  *
  * See https://github.com/AFLplusplus/LibAFL-legacy/blob/dev/src/mutator.c
  * 
@@ -72,7 +71,7 @@ namespace vader::radamsa::mutations
  *  customized fuzzers for a specific target while taking advantage of
  *  a lot of features that AFL++ already provides.
  */
-class LineMutations: public vader::radamsa::mutations::MutationBase
+class LineMutations: public vmf::radamsa::mutations::MutationBase
 {
 public:
     struct Line

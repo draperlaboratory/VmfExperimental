@@ -1,7 +1,7 @@
 /* =============================================================================
  * Vader Modular Fuzzer
- * Copyright (c) 2021-2023 The Charles Stark Draper Laboratory, Inc.
- * <vader@draper.com>
+ * Copyright (c) 2021-2024 The Charles Stark Draper Laboratory, Inc.
+ * <vmf@draper.com>
  *
  * Effort sponsored by the U.S. Government under Other Transaction number
  * W9124P-19-9-0001 between AMTC and the Government. The U.S. Government
@@ -13,19 +13,18 @@
  * or endorsements, either expressed or implied, of the U.S. Government.
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
+ * it under the terms of the GNU General Public License version 2 (only) as 
+ * published by the Free Software Foundation.
+ *  
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *
+ *  
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- * @license GPL-3.0-or-later <https://spdx.org/licenses/GPL-3.0-or-later>
+ *  
+ * @license GPL-2.0-only <https://spdx.org/licenses/GPL-2.0-only.html>
  * ===========================================================================*/
 /*****
  * The following includes code copied from the LibAFL_Legacy repository.
@@ -50,7 +49,7 @@
 
 #include "byteMutations.hpp"
 
-void vader::radamsa::mutations::ByteMutations::DropByte(
+void vmf::radamsa::mutations::ByteMutations::DropByte(
                                                     StorageEntry* newEntry,
                                                     const size_t originalSize,
                                                     const char* originalBuffer,
@@ -106,7 +105,7 @@ void vader::radamsa::mutations::ByteMutations::DropByte(
     }
 }
 
-void vader::radamsa::mutations::ByteMutations::FlipByte(
+void vmf::radamsa::mutations::ByteMutations::FlipByte(
                                                     StorageEntry* newEntry,
                                                     const size_t originalSize,
                                                     const char* originalBuffer,
@@ -161,7 +160,7 @@ void vader::radamsa::mutations::ByteMutations::FlipByte(
     newBuffer[randomIndexToFlip] ^= randomMaskedBit;
 }
 
-void vader::radamsa::mutations::ByteMutations::InsertByte(
+void vmf::radamsa::mutations::ByteMutations::InsertByte(
                                                     StorageEntry* newEntry,
                                                     const size_t originalSize,
                                                     const char* originalBuffer,
@@ -217,7 +216,7 @@ void vader::radamsa::mutations::ByteMutations::InsertByte(
     }
 }
 
-void vader::radamsa::mutations::ByteMutations::RepeatByte(
+void vmf::radamsa::mutations::ByteMutations::RepeatByte(
                                                     StorageEntry* newEntry,
                                                     const size_t originalSize,
                                                     const char* originalBuffer,
@@ -281,7 +280,7 @@ void vader::radamsa::mutations::ByteMutations::RepeatByte(
     }
 }
 
-void vader::radamsa::mutations::ByteMutations::PermuteByte(
+void vmf::radamsa::mutations::ByteMutations::PermuteByte(
                                                     StorageEntry* newEntry,
                                                     const size_t originalSize,
                                                     const char* originalBuffer,
@@ -337,7 +336,7 @@ void vader::radamsa::mutations::ByteMutations::PermuteByte(
     }
 }
 
-void vader::radamsa::mutations::ByteMutations::IncrementByte(
+void vmf::radamsa::mutations::ByteMutations::IncrementByte(
                                                         StorageEntry* newEntry,
                                                         const size_t originalSize,
                                                         const char* originalBuffer,
@@ -383,7 +382,7 @@ void vader::radamsa::mutations::ByteMutations::IncrementByte(
     newBuffer[randomIndexToIncrement] = static_cast<char>((originalBuffer[randomIndexToIncrement] + 0x01u) % std::numeric_limits<char>::max());
 }
 
-void vader::radamsa::mutations::ByteMutations::DecrementByte(
+void vmf::radamsa::mutations::ByteMutations::DecrementByte(
                                                         StorageEntry* newEntry,
                                                         const size_t originalSize,
                                                         const char* originalBuffer,
@@ -429,7 +428,7 @@ void vader::radamsa::mutations::ByteMutations::DecrementByte(
     newBuffer[randomIndexToDecrement] = static_cast<char>((originalBuffer[randomIndexToDecrement] - 0x01u) % std::numeric_limits<char>::max());
 }
 
-void vader::radamsa::mutations::ByteMutations::RandomizeByte(
+void vmf::radamsa::mutations::ByteMutations::RandomizeByte(
                                                         StorageEntry* newEntry,
                                                         const size_t originalSize,
                                                         const char* originalBuffer,

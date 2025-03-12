@@ -1,7 +1,7 @@
 /* =============================================================================
  * Vader Modular Fuzzer
- * Copyright (c) 2021-2023 The Charles Stark Draper Laboratory, Inc.
- * <vader@draper.com>
+ * Copyright (c) 2021-2024 The Charles Stark Draper Laboratory, Inc.
+ * <vmf@draper.com>
  *
  * Effort sponsored by the U.S. Government under Other Transaction number
  * W9124P-19-9-0001 between AMTC and the Government. The U.S. Government
@@ -13,19 +13,18 @@
  * or endorsements, either expressed or implied, of the U.S. Government.
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
+ * it under the terms of the GNU General Public License version 2 (only) as 
+ * published by the Free Software Foundation.
+ *  
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *
+ *  
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- * @license GPL-3.0-or-later <https://spdx.org/licenses/GPL-3.0-or-later>
+ *  
+ * @license GPL-2.0-only <https://spdx.org/licenses/GPL-2.0-only.html>
  * ===========================================================================*/
 #pragma once
 
@@ -37,13 +36,13 @@
 #include "lineMutations.hpp"
 
 
-namespace vader::modules::radamsa
+namespace vmf::modules::radamsa
 {
 /**
  * @brief This module is draws heavily upon the libAFL mutator.c
  * 
  * Uses the specified AFL-style mutation algorithm to mutate the provided
- * input.  createTestCase is the main mutation method.
+ * input.  mutateTestCase is the main mutation method.
  *
  * See https://github.com/AFLplusplus/LibAFL-legacy/blob/dev/src/mutator.c
  * 
@@ -67,8 +66,8 @@ namespace vader::modules::radamsa
  *  a lot of features that AFL++ already provides.
  */
 class RadamsaMutator: public MutatorModule,
-                      public vader::radamsa::mutations::ByteMutations,
-                      public vader::radamsa::mutations::LineMutations
+                      public vmf::radamsa::mutations::ByteMutations,
+                      public vmf::radamsa::mutations::LineMutations
 {
 public:
     enum class AlgorithmType : uint8_t
@@ -94,8 +93,8 @@ public:
     virtual ~RadamsaMutator() = default;
 
     RadamsaMutator(std::string name) noexcept : MutatorModule{name},
-                                                vader::radamsa::mutations::ByteMutations{RANDOM_NUMBER_GENERATOR_},
-                                                vader::radamsa::mutations::LineMutations{RANDOM_NUMBER_GENERATOR_}
+                                                vmf::radamsa::mutations::ByteMutations{RANDOM_NUMBER_GENERATOR_},
+                                                vmf::radamsa::mutations::LineMutations{RANDOM_NUMBER_GENERATOR_}
                                                 
     {}
 
@@ -106,7 +105,7 @@ public:
 
     virtual void registerStorageNeeds(StorageRegistry& registry);
     
-    virtual StorageEntry* createTestCase(StorageModule& storage, StorageEntry* baseEntry);
+    virtual void mutateTestCase(StorageModule& storage, StorageEntry* baseEntry, StorageEntry* newEntry, int testCaseKey);
 
     static Module* build(std::string name);
 
@@ -123,7 +122,6 @@ protected:
     static constexpr int INVALID_TEST_CASE_KEY_{std::numeric_limits<int>::min()};
     static constexpr int INVALID_NORMAL_TAG_{INVALID_TEST_CASE_KEY_};
 
-    int testCaseKey_{INVALID_TEST_CASE_KEY_};
     int normalTag_{INVALID_NORMAL_TAG_};
     AlgorithmType algorithmType_{AlgorithmType::ByteMutations_DropByte};
 

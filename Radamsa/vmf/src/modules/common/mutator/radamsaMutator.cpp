@@ -1,7 +1,7 @@
 /* =============================================================================
  * Vader Modular Fuzzer
- * Copyright (c) 2021-2023 The Charles Stark Draper Laboratory, Inc.
- * <vader@draper.com>
+ * Copyright (c) 2021-2024 The Charles Stark Draper Laboratory, Inc.
+ * <vmf@draper.com>
  *
  * Effort sponsored by the U.S. Government under Other Transaction number
  * W9124P-19-9-0001 between AMTC and the Government. The U.S. Government
@@ -13,19 +13,18 @@
  * or endorsements, either expressed or implied, of the U.S. Government.
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
+ * it under the terms of the GNU General Public License version 2 (only) as 
+ * published by the Free Software Foundation.
+ *  
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *
+ *  
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- * @license GPL-3.0-or-later <https://spdx.org/licenses/GPL-3.0-or-later>
+ *  
+ * @license GPL-2.0-only <https://spdx.org/licenses/GPL-2.0-only.html>
  * ===========================================================================*/
 /*****
  * The following includes code copied from the LibAFL_Legacy repository.
@@ -52,14 +51,14 @@
 #include "ModuleFactory.hpp"
 #include "radamsaMutator.hpp"
 
-namespace vader
+namespace vmf
 {
-REGISTER_MODULE(vader::modules::radamsa::RadamsaMutator);
+REGISTER_MODULE(vmf::modules::radamsa::RadamsaMutator);
 }
 
-vader::Module* vader::modules::radamsa::RadamsaMutator::build(std::string name) { return new RadamsaMutator(name); }
+vmf::Module* vmf::modules::radamsa::RadamsaMutator::build(std::string name) { return new RadamsaMutator(name); }
 
-void vader::modules::radamsa::RadamsaMutator::SetAlgorithmType(const AlgorithmType algorithmType)
+void vmf::modules::radamsa::RadamsaMutator::SetAlgorithmType(const AlgorithmType algorithmType)
 {
     switch(algorithmType)
     {
@@ -91,88 +90,83 @@ void vader::modules::radamsa::RadamsaMutator::SetAlgorithmType(const AlgorithmTy
     }
 }
 
-void vader::modules::radamsa::RadamsaMutator::registerStorageNeeds(StorageRegistry& registry)
+void vmf::modules::radamsa::RadamsaMutator::registerStorageNeeds(StorageRegistry& registry)
 {
-    testCaseKey_ = registry.registerKey(
-                                "TEST_CASE",
-                                StorageRegistry::BUFFER,
-                                StorageRegistry::READ_WRITE);
-
     normalTag_ = registry.registerTag(
                                 "RAN_SUCCESSFULLY",
                                 StorageRegistry::READ_ONLY);
 }
 
-vader::StorageEntry* vader::modules::radamsa::RadamsaMutator::createTestCase(StorageModule& storage, StorageEntry* baseEntry)
+void vmf::modules::radamsa::RadamsaMutator::mutateTestCase(StorageModule& storage, StorageEntry* baseEntry, StorageEntry* newEntry, int testCaseKey)
 {
     if (baseEntry == nullptr)
         throw RuntimeException("RadamsaMutator mutate called with null base entry", RuntimeException::OTHER);
+    if (newEntry == nullptr)
+	throw RuntimeException("RadamsaMutator mutate called with numm new entry", RuntimeException::OTHER);
 
     const size_t minimumSeedIndex{0u};
-    const int size{baseEntry->getBufferSize(testCaseKey_)};
-    const char* buffer{baseEntry->getBufferPointer(testCaseKey_)};
+    const int size{baseEntry->getBufferSize(testCaseKey)};
+    const char* buffer{baseEntry->getBufferPointer(testCaseKey)};
 
     if(size <= 0)
         throw RuntimeException("RadamsaMutator mutate called with zero sized buffer", RuntimeException::USAGE_ERROR);
 
-    StorageEntry* newEntry{storage.createNewEntry()};
-
     switch(algorithmType_)
     {
     case AlgorithmType::ByteMutations_DropByte:
-        DropByte(newEntry, size, buffer, minimumSeedIndex, testCaseKey_);
+        DropByte(newEntry, size, buffer, minimumSeedIndex, testCaseKey);
         
         break;
     case AlgorithmType::ByteMutations_FlipByte:
-        FlipByte(newEntry, size, buffer, minimumSeedIndex, testCaseKey_);
+        FlipByte(newEntry, size, buffer, minimumSeedIndex, testCaseKey);
         
         break;
     case AlgorithmType::ByteMutations_InsertByte:
-        InsertByte(newEntry, size, buffer, minimumSeedIndex, testCaseKey_);
+        InsertByte(newEntry, size, buffer, minimumSeedIndex, testCaseKey);
         
         break;
     case AlgorithmType::ByteMutations_RepeatByte:
-        RepeatByte(newEntry, size, buffer, minimumSeedIndex, testCaseKey_);
+        RepeatByte(newEntry, size, buffer, minimumSeedIndex, testCaseKey);
         
         break;
     case AlgorithmType::ByteMutations_PermuteByte:
-        PermuteByte(newEntry, size, buffer, minimumSeedIndex, testCaseKey_);
+        PermuteByte(newEntry, size, buffer, minimumSeedIndex, testCaseKey);
         
         break;
     case AlgorithmType::ByteMutations_IncrementByte:
-        IncrementByte(newEntry, size, buffer, minimumSeedIndex, testCaseKey_);
+        IncrementByte(newEntry, size, buffer, minimumSeedIndex, testCaseKey);
         
         break;
     case AlgorithmType::ByteMutations_DecrementByte:
-        DecrementByte(newEntry, size, buffer, minimumSeedIndex, testCaseKey_);
+        DecrementByte(newEntry, size, buffer, minimumSeedIndex, testCaseKey);
         
         break;
     case AlgorithmType::ByteMutations_RandomizeByte:
-        RandomizeByte(newEntry, size, buffer, minimumSeedIndex, testCaseKey_);
+        RandomizeByte(newEntry, size, buffer, minimumSeedIndex, testCaseKey);
         
         break;
     case AlgorithmType::LineMutations_DeleteLine:
-        DeleteLine(newEntry, size, buffer, minimumSeedIndex, testCaseKey_);
+        DeleteLine(newEntry, size, buffer, minimumSeedIndex, testCaseKey);
         
         break;
     case AlgorithmType::LineMutations_DeleteSequentialLines:
-        DeleteSequentialLines(newEntry, size, buffer, minimumSeedIndex, testCaseKey_);
+        DeleteSequentialLines(newEntry, size, buffer, minimumSeedIndex, testCaseKey);
         
         break;
     case AlgorithmType::LineMutations_DuplicateLine:
-        DuplicateLine(newEntry, size, buffer, minimumSeedIndex, testCaseKey_);
+        DuplicateLine(newEntry, size, buffer, minimumSeedIndex, testCaseKey);
         
         break;
     case AlgorithmType::LineMutations_CopyLineCloseBy:
-        CopyLineCloseBy(newEntry, size, buffer, minimumSeedIndex, testCaseKey_);
+        CopyLineCloseBy(newEntry, size, buffer, minimumSeedIndex, testCaseKey);
         
         break;
     case AlgorithmType::LineMutations_RepeatLine:
-        RepeatLine(newEntry, size, buffer, minimumSeedIndex, testCaseKey_);
+        RepeatLine(newEntry, size, buffer, minimumSeedIndex, testCaseKey);
         
         break;
     case AlgorithmType::LineMutations_SwapLine:
-        SwapLine(newEntry, size, buffer, minimumSeedIndex, testCaseKey_);
+        SwapLine(newEntry, size, buffer, minimumSeedIndex, testCaseKey);
         
         break;
     default:
@@ -180,11 +174,9 @@ vader::StorageEntry* vader::modules::radamsa::RadamsaMutator::createTestCase(Sto
 
         break;
     }
-
-    return newEntry;
 }
 
-vader::modules::radamsa::RadamsaMutator::AlgorithmType vader::modules::radamsa::RadamsaMutator::stringToType(std::string type)
+vmf::modules::radamsa::RadamsaMutator::AlgorithmType vmf::modules::radamsa::RadamsaMutator::stringToType(std::string type)
 {
     if(type.compare("ByteMutations_DropByte") == 0)
         return AlgorithmType::ByteMutations_DropByte;

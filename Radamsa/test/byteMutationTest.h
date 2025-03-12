@@ -1,7 +1,7 @@
 /* =============================================================================
 * Vader Modular Fuzzer
 * Copyright (c) 2021-2023 The Charles Stark Draper Laboratory, Inc.
-* <vader@draper.com>
+* <vmf@draper.com>
 *
 * Effort sponsored by the U.S. Government under Other Transaction number
 * W9124P-19-9-0001 between AMTC and the Government. The U.S. Government
@@ -46,22 +46,22 @@
 #include "SimpleStorage.hpp"
 #include "byteMutations.hpp"
 
-namespace vader::test::modules::radamsa::mutations
+namespace vmf::test::modules::radamsa::mutations
 {
 class ByteMutationTest : public ::testing::Test,
-                         public ::vader::radamsa::mutations::ByteMutations
+                         public ::vmf::radamsa::mutations::ByteMutations
 {
 public:
     virtual ~ByteMutationTest() = default;
 
-    ByteMutationTest() : ::vader::radamsa::mutations::ByteMutations{randomNumberGenerator_} {}
+    ByteMutationTest() : ::vmf::radamsa::mutations::ByteMutations{randomNumberGenerator_} {}
 
 protected:
-    typedef std::function<void(vader::StorageEntry*, const size_t, const char*, const size_t, const int)> Byte_Mutation_Callback;
+    typedef std::function<void(vmf::StorageEntry*, const size_t, const char*, const size_t, const int)> Byte_Mutation_Callback;
 
     static constexpr size_t inputBufferSize_{5u};
 
-    std::tuple<int, std::unique_ptr<vader::SimpleStorage>, unsigned long> RunByteMutationCallback(
+    std::tuple<int, std::unique_ptr<vmf::SimpleStorage>, unsigned long> RunByteMutationCallback(
                                                                                     const char* inputBuffer,
                                                                                     const int size,
                                                                                     const int minimumSeedIndex,
@@ -69,23 +69,23 @@ protected:
     {
         // Subtest prologue - Get testcase key and storage entry
 
-        std::unique_ptr<vader::SimpleStorage> storage{std::make_unique<vader::SimpleStorage>("storage")};
-        std::unique_ptr<vader::StorageRegistry> registry{
-                                            std::make_unique<vader::StorageRegistry>(
+        std::unique_ptr<vmf::SimpleStorage> storage{std::make_unique<vmf::SimpleStorage>("storage")};
+        std::unique_ptr<vmf::StorageRegistry> registry{
+                                            std::make_unique<vmf::StorageRegistry>(
                                                                         "TEST_INT",
-                                                                        vader::StorageRegistry::INT,
-                                                                        vader::StorageRegistry::ASCENDING)};
-        std::unique_ptr<vader::StorageRegistry> metadata{std::make_unique<vader::StorageRegistry>()};
+                                                                        vmf::StorageRegistry::INT,
+                                                                        vmf::StorageRegistry::ASCENDING)};
+        std::unique_ptr<vmf::StorageRegistry> metadata{std::make_unique<vmf::StorageRegistry>()};
 
         const int testCaseKey{
                         registry->registerKey(
                                         "TEST_CASE",
-                                        vader::StorageRegistry::BUFFER,
-                                        vader::StorageRegistry::READ_WRITE)};
+                                        vmf::StorageRegistry::BUFFER,
+                                        vmf::StorageRegistry::READ_WRITE)};
 
         storage->configure(registry.get(), metadata.get());
 
-        vader::StorageEntry* storageEntryPtr{storage->createNewEntry()};
+        vmf::StorageEntry* storageEntryPtr{storage->createNewEntry()};
 
         storage->saveEntry(storageEntryPtr);
 

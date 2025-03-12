@@ -1,7 +1,7 @@
 /* =============================================================================
 * Vader Modular Fuzzer
 * Copyright (c) 2021-2023 The Charles Stark Draper Laboratory, Inc.
-* <vader@draper.com>
+* <vmf@draper.com>
 *
 * Effort sponsored by the U.S. Government under Other Transaction number
 * W9124P-19-9-0001 between AMTC and the Government. The U.S. Government
@@ -40,15 +40,15 @@
 // VMF Includes
 #include "mutationBase.hpp"
 
-namespace vader::test::modules::radamsa::mutations
+namespace vmf::test::modules::radamsa::mutations
 {
 class MutationBaseTest : public ::testing::Test,
-                         public ::vader::radamsa::mutations::MutationBase
+                         public ::vmf::radamsa::mutations::MutationBase
 {
 public:
     virtual ~MutationBaseTest() = default;
 
-    MutationBaseTest() : ::vader::radamsa::mutations::MutationBase{randomNumberGenerator_} {}
+    MutationBaseTest() : ::vmf::radamsa::mutations::MutationBase{randomNumberGenerator_} {}
 
 protected:
 
