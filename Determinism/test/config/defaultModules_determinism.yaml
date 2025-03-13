@@ -1,0 +1,36 @@
+#To achieve determinism, the vmfFramework.seed parameter must be set as well
+vmfModules:
+  storage: #a storage module must be specified
+    className: SimpleStorage
+  controller: #a controller module must be specified
+    className: IterativeController
+    children:
+      - className: DirectoryBasedSeedGen
+      - className: GeneticAlgorithmInputGenerator
+      - className: AFLForkserverExecutor
+      - className: AFLDeterministicFeedback
+      - className: SaveCorpusOutput
+      - className: ComputeStats
+      - className: StatsOutput
+      - className: DeterminismTesterOutput      
+  GeneticAlgorithmInputGenerator:
+    children:
+      - className: AFLFlipBitMutator
+      - className: AFLFlip2BitMutator
+      - className: AFLFlip4BitMutator
+      - className: AFLFlipByteMutator
+      - className: AFLFlip2ByteMutator
+      - className: AFLFlip4ByteMutator
+      - className: AFLRandomByteAddSubMutator
+      - className: AFLRandomByteMutator
+      - className: AFLDeleteMutator
+      - className: AFLCloneMutator
+      - className: AFLSpliceMutator
+
+# Modules-specific parameters
+#(The SUT-specific portions of these all defined using YAML anchors)
+AFLForkserverExecutor:
+  sutArgv: *SUT_ARGV
+
+DirectoryBasedSeedGen:
+  inputDir: *INPUT_DIR

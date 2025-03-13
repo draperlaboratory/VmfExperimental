@@ -50,6 +50,7 @@ include(vmf)
 # ---- TAILOR SPECIFIC EXTENSION PACKAGES HERE ----
 
 # Add in extension package directories
-add_subdirectory(${PROJECT_SOURCE_DIR}/Radamsa/vmf/src)
-add_subdirectory(${PROJECT_SOURCE_DIR}/SamplePackage/vmf/src)
+add_subdirectory(${PROJECT_SOURCE_DIR}/Determinism)
+add_subdirectory(${PROJECT_SOURCE_DIR}/Radamsa)
+#add_subdirectory(${PROJECT_SOURCE_DIR}/SamplePackage)
 
