@@ -22,5 +22,5 @@ add_subdirectory(vmf/src)
 
 #install sample configuration files
 install(DIRECTORY test DESTINATION
-  DESTINATION ${VMF_INSTALL} )
+  DESTINATION ${CMAKE_INSTALL_PREFIX} )
 

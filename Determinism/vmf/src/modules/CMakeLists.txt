@@ -24,23 +24,40 @@ add_library(Determinism SHARED
   common/output/DeterminismTesterOutput.cpp
 )
 
+#Set flag to export all symbols for windows builds
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+# windows needs an additional import to make the logger work
+if(WIN32)
+  target_compile_definitions(Determinism PRIVATE PLOG_IMPORT)
+endif()
+
 # Build-time dependencies for Determinism
 link_directories(Determinism PRIVATE
 )
 
 # Build-time dependencies for Determinism
 target_link_libraries(Determinism PRIVATE
+  vmf_framework
 )
 
 # Build-time dependencies for Determinism
 target_include_directories(Determinism PRIVATE
-  ${VMF_INSTALL}/include
-  ${VMF_INSTALL}/include/vmf
-  ${VMF_INSTALL}/include/plog
+  ${CMAKE_INSTALL_PREFIX}/include
+  ${CMAKE_INSTALL_PREFIX}/include/vmf
+  ${CMAKE_INSTALL_PREFIX}/include/plog
   ${PROJECT_SOURCE_DIR}/src/module
 )
 
 # Install Determinism library in VMF plugins directory
 install(TARGETS Determinism
-  LIBRARY DESTINATION "${VMF_INSTALL}/plugins")
+  LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/plugins")
+
+#On windows the /plugins directory above is ignored, and everything ends up in /lib and /bin
+if(WIN32)
+  cmake_path(SET WIN_LIB_FILE ${CMAKE_INSTALL_PREFIX}/lib/Determinism.lib)
+  cmake_path(SET WIN_DLL_FILE ${CMAKE_INSTALL_PREFIX}/bin/Determinism.dll)
+  install(FILES ${WIN_LIB_FILE} ${WIN_DLL_FILE}
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/plugins)
+endif()
 

@@ -1,16 +1,7 @@
 /* =============================================================================
  * Vader Modular Fuzzer (VMF)
- * Copyright (c) 2021-2024 The Charles Stark Draper Laboratory, Inc.
+ * Copyright (c) 2021-2025 The Charles Stark Draper Laboratory, Inc.
  * <vmf@draper.com>
- *  
- * Effort sponsored by the U.S. Government under Other Transaction number
- * W9124P-19-9-0001 between AMTC and the Government. The U.S. Government
- * Is authorized to reproduce and distribute reprints for Governmental purposes
- * notwithstanding any copyright notation thereon.
- *  
- * The views and conclusions contained herein are those of the authors and
- * should not be interpreted as necessarily representing the official policies
- * or endorsements, either expressed or implied, of the U.S. Government.
  *  
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 (only) as 
@@ -29,7 +20,7 @@
 #include "AFLDeterministicFeedback.hpp"
 #include "Logging.hpp"
 #include "VmfUtil.hpp"
-#include <cmath>
+#include <tgmath.h>
 
 using namespace vmf;
 
@@ -108,7 +99,7 @@ void AFLDeterministicFeedback::evaluateTestCaseResults(StorageModule& storage, s
         int size = e->getBufferSize(testCaseKey);
         avgTestCaseSize = ((avgTestCaseSize * numTestCases) + size)/(numTestCases + 1);
         if (size > maxTestCaseSize)
-            maxTestCaseSize = size;
+            maxTestCaseSize = (float) size;
 
         numTestCases++;
 
@@ -133,26 +124,26 @@ void AFLDeterministicFeedback::evaluateTestCaseResults(StorageModule& storage, s
 
 float AFLDeterministicFeedback::computeFitness(StorageModule& storage, StorageEntry* e)
 {
-    uint coverage = e->getUIntValue(coverageByteCountKey); 
+    unsigned int coverage = e->getUIntValue(coverageByteCountKey); 
     int size = e->getBufferSize(testCaseKey);
 
     float fitness = 0;
     if(useCustomWeights)
     {
-        fitness = log10(coverage) + 1;
+        fitness = log10f((float)coverage) + 1;
 
         // Compute normalized size; use 1 minus the value because they are inversely related to fitness
-        float normalizedSize = 1.0 - size / maxTestCaseSize;
+        float normalizedSize = (float)1.0 - size / maxTestCaseSize;
 
         // Apply size weights to fitness
-        fitness *= (1.0 + normalizedSize * sizeFitnessWeight);
+        fitness *= ((float)1.0 + normalizedSize * sizeFitnessWeight);
     }
     else
     {
         //Use an algorithm that is closer to what AFL++ uses
         fitness = 1.0; 
         // Prioritize testcases with high coverage 
-        fitness *= log10(coverage) + 1; 
+        fitness *= log10f((float)coverage) + 1; 
         // Adjust weight based on size of this testcase compared to average
         fitness *= (avgTestCaseSize / size); 
 
