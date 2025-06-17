@@ -66,7 +66,7 @@ void RadamsaDecrementByteMutator::init(ConfigInterface& config)
  */
 RadamsaDecrementByteMutator::RadamsaDecrementByteMutator(std::string name) : MutatorModule(name)
 {
-    rand.randInit();
+    // rand->randInit();
 }
 
 /**
@@ -125,7 +125,7 @@ void RadamsaDecrementByteMutator::mutateTestCase(StorageModule& storage, Storage
     const size_t maximumRandomIndexValue{originalSize - minimumSeedIndex};
     const size_t randomIndexToDecrement{
                                     std::clamp(
-                                        rand.randBetween(
+                                        rand->randBetween(
                                             lower,
                                             maximumRandomIndexValue) + minimumSeedIndex,
                                         lower,

@@ -66,7 +66,7 @@ void RadamsaRandomizeByteMutator::init(ConfigInterface& config)
  */
 RadamsaRandomizeByteMutator::RadamsaRandomizeByteMutator(std::string name) : MutatorModule(name)
 {
-    rand.randInit();
+    // rand->randInit();
 }
 
 /**
@@ -124,7 +124,7 @@ void RadamsaRandomizeByteMutator::mutateTestCase(StorageModule& storage, Storage
     const size_t maximumRandomIndexValue{originalSize - minimumSeedIndex};
     const size_t randomIndexToRandomize{
                                     std::clamp(
-                                        rand.randBetween(
+                                        rand->randBetween(
                                             lower,
                                             maximumRandomIndexValue) + minimumSeedIndex,
                                         lower,
@@ -132,5 +132,5 @@ void RadamsaRandomizeByteMutator::mutateTestCase(StorageModule& storage, Storage
                                     )
     };
 
-    newBuffer[randomIndexToRandomize] = static_cast<char>(rand.randBetween(0u, std::numeric_limits<char>::max()));
+    newBuffer[randomIndexToRandomize] = static_cast<char>(rand->randBetween(0u, std::numeric_limits<char>::max()));
 }

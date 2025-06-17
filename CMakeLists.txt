@@ -47,6 +47,11 @@ list(APPEND CMAKE_MODULE_PATH "${VMF_INSTALL}/cmake")
 include(vmf_imports)
 include(vmf)
 
+# Configure testing
+include(GoogleTest)
+enable_testing()
+add_subdirectory(${PROJECT_SOURCE_DIR}/test)
+
 # ---- TAILOR SPECIFIC EXTENSION PACKAGES HERE ----
 
 # Add in extension package directories

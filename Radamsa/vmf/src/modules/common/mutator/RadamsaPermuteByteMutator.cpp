@@ -66,7 +66,7 @@ void RadamsaPermuteByteMutator::init(ConfigInterface& config)
  */
 RadamsaPermuteByteMutator::RadamsaPermuteByteMutator(std::string name) : MutatorModule(name)
 {
-    rand.randInit();
+    // rand->randInit();
 }
 
 /**
@@ -129,7 +129,7 @@ void RadamsaPermuteByteMutator::mutateTestCase(StorageModule& storage, StorageEn
         const size_t maximumRandomIndexValue{originalSize - minimumSeedIndex};
         const size_t randomIndexToSwap{
                                     std::clamp(
-                                            rand.randBetween(
+                                            rand->randBetween(
                                                 lower,
                                                 maximumRandomIndexValue) + minimumSeedIndex,
                                             lower,

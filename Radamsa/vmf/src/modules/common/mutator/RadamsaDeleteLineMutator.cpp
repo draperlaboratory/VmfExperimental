@@ -29,24 +29,22 @@
  /**
   *
   */
-#include "RadamsaRepeatByteMutator.hpp"
+#include "RadamsaDeleteLineMutator.hpp"
 #include "RuntimeException.hpp"
-#include <random>
-#include <algorithm>
 
 using namespace vmf;
 
 #include "ModuleFactory.hpp"
-REGISTER_MODULE(RadamsaRepeatByteMutator);
+REGISTER_MODULE(RadamsaDeleteLineMutator);
 
 /**
  * @brief Builder method to support the ModuleFactory
  * Constructs an instance of this class
  * @return Module* - Pointer to the newly created instance
  */
-Module* RadamsaRepeatByteMutator::build(std::string name)
+Module* RadamsaDeleteLineMutator::build(std::string name)
 {
-    return new RadamsaRepeatByteMutator(name);
+    return new RadamsaDeleteLineMutator(name);
 }
 
 /**
@@ -54,26 +52,26 @@ Module* RadamsaRepeatByteMutator::build(std::string name)
  *
  * @param config - Configuration object
  */
-void RadamsaRepeatByteMutator::init(ConfigInterface& config)
+void RadamsaDeleteLineMutator::init(ConfigInterface& config)
 {
 
 }
 
 /**
- * @brief Construct a new RadamsaRepeatByteMutator::RadamsaRepeatByteMutator object
+ * @brief Construct a new RadamsaDeleteLineMutator::RadamsaDeleteLineMutator object
  *
  * @param name The of the name module
  */
-RadamsaRepeatByteMutator::RadamsaRepeatByteMutator(std::string name) : MutatorModule(name)
+RadamsaDeleteLineMutator::RadamsaDeleteLineMutator(std::string name) : MutatorModule(name)
 {
-    // rand->randInit();
+    // rand.randInit();
 }
 
 /**
- * @brief Destroy the RadamsaRepeatByteMutator::RadamsaRepeatByteMutator object
+ * @brief Destroy the RadamsaDeleteLineMutator::RadamsaDeleteLineMutator object
  *
  */
-RadamsaRepeatByteMutator::~RadamsaRepeatByteMutator()
+RadamsaDeleteLineMutator::~RadamsaDeleteLineMutator()
 {
 
 }
@@ -83,71 +81,77 @@ RadamsaRepeatByteMutator::~RadamsaRepeatByteMutator()
  *
  * @param registry - StorageRegistry object
  */
-void RadamsaRepeatByteMutator::registerStorageNeeds(StorageRegistry& registry)
+void RadamsaDeleteLineMutator::registerStorageNeeds(StorageRegistry& registry)
 {
     // This module does not register for a test case buffer key, because mutators are told which buffer to write in storage
     // by the input generator that calls them
 }
 
-void RadamsaRepeatByteMutator::mutateTestCase(StorageModule& storage, StorageEntry* baseEntry, StorageEntry* newEntry, int testCaseKey)
+void RadamsaDeleteLineMutator::mutateTestCase(StorageModule& storage, StorageEntry* baseEntry, StorageEntry* newEntry, int testCaseKey)
 {
-    // Consume the original buffer by repeating a byte a random number of times and appending a null-terminator to the end.
+    // Consume the original buffer by deleting a line from it and appending a null-terminator to the end.
 
     constexpr size_t minimumSize{1u};
     const size_t minimumSeedIndex{0u};
+    const size_t characterIndex{0u};
     const size_t originalSize = baseEntry->getBufferSize(testCaseKey);
     char* originalBuffer = baseEntry->getBufferPointer(testCaseKey);
 
     if (originalSize < minimumSize)
         throw RuntimeException{"The buffer's minimum size must be greater than or equal to 1", RuntimeException::USAGE_ERROR};
 
-    if (minimumSeedIndex > originalSize - 1u)
-        throw RuntimeException{"Minimum seed index is out of bounds", RuntimeException::INDEX_OUT_OF_RANGE};
+    if (characterIndex > originalSize - 1u)
+        throw RuntimeException{"Character index is out of bounds", RuntimeException::INDEX_OUT_OF_RANGE};
 
     if (originalBuffer == nullptr)
         throw RuntimeException{"Input buffer is null", RuntimeException::UNEXPECTED_ERROR};
 
-    // The new buffer size will contain a random number of additional elements since we are repeating a random byte.
-    // Furthermore, it will contain one more element since we are appending a null-terminator to the end.
+    const size_t numberOfLinesAfterIndex{
+                                    GetNumberOfLinesAfterIndex(
+                                                            originalBuffer,
+                                                            originalSize,
+                                                            characterIndex)};
 
-    const size_t numberOfRandomByteRepetitions{GetRandomByteRepetitionLength(rand)};
-    const size_t newBufferSize{originalSize + numberOfRandomByteRepetitions + 1u};
+    // Select a random line to delete.
+
+    constexpr size_t minimumRandomLineIndex{0u};
+    const size_t maximumRandomLineIndex{numberOfLinesAfterIndex - 1u};
+
+    const size_t randomLineIndex{
+                            rand->randBetween(
+                                            minimumRandomLineIndex,
+                                            maximumRandomLineIndex)};
+
+    const Line lineData{
+                    GetLineData(
+                            originalBuffer,
+                            originalSize,
+                            randomLineIndex,
+                            numberOfLinesAfterIndex)};
+
+    // The new buffer will be one line smaller than the original buffer;
+    // additionally, it will contain one additional byte since a null-terminator will be appended to the end.
+
+    const size_t newBufferSize{originalSize - lineData.Size + 1u};
+    // const std::string message = ("numberOfLinesAfterIndex = " + std::to_string(numberOfLinesAfterIndex)); //deleteme
+    // throw RuntimeException(message.c_str()); //deleteme
 
     // Allocate the new buffer and set it's elements to zero.
 
-    char* newBuffer{newEntry->allocateBuffer(testCaseKey, static_cast<int>(newBufferSize))};
+    char* newBuffer{newEntry->allocateBuffer(testCaseKey, newBufferSize)};
     memset(newBuffer, 0u, newBufferSize);
 
-    // Select a random index from which the new bytes will be repeated.
-
-    const size_t lower{0u};
-    const size_t upper{originalSize - 1u};
-    const size_t maximumRandomIndexValue{originalSize - minimumSeedIndex};
-    const size_t randomByteRepetitionIndex{
-                                    std::clamp(
-                                        rand->randBetween(
-                                            lower,
-                                            maximumRandomIndexValue) + minimumSeedIndex,
-                                        lower,
-                                        upper
-                                    )
-    };
-
-    // Copy data from the original buffer into the new buffer, but repeat the target byte.
+    // Copy data from the original buffer into the new buffer, but skip the elements in the random line that is to be deleted.
     // The last element in the new buffer is skipped since it was implicitly set to zero during allocation.
 
-    for (size_t sourceIndex{0u}, destinationIndex{0u}; sourceIndex < originalSize; ++sourceIndex)
+    for(size_t sourceIndex{0u}, destinationIndex{0u}; sourceIndex < originalSize; ++sourceIndex)
     {
-        if (sourceIndex == randomByteRepetitionIndex)
-        {
-            memset(&newBuffer[destinationIndex], originalBuffer[sourceIndex], numberOfRandomByteRepetitions + 1u);
+        const size_t lineStartIndex{lineData.StartIndex};
+        const size_t lineEndIndex{lineStartIndex + lineData.Size};
 
-            ++destinationIndex += numberOfRandomByteRepetitions;
-        }
-        else
+        if(sourceIndex < lineStartIndex || sourceIndex >= lineEndIndex)
         {
             newBuffer[destinationIndex] = originalBuffer[sourceIndex];
-
             ++destinationIndex;
         }
     }

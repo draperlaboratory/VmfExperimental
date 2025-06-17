@@ -66,7 +66,7 @@ void RadamsaDropByteMutator::init(ConfigInterface& config)
  */
 RadamsaDropByteMutator::RadamsaDropByteMutator(std::string name) : MutatorModule(name)
 {
-    rand.randInit();
+    // rand->randInit();
 }
 
 /**
@@ -123,7 +123,7 @@ void RadamsaDropByteMutator::mutateTestCase(StorageModule& storage, StorageEntry
     const size_t maximumRandomIndexValue{originalSize - minimumSeedIndex};
     const size_t randomIndexToDrop{
                             std::clamp(
-                                    rand.randBetween(
+                                    rand->randBetween(
                                                         lower,
                                                         maximumRandomIndexValue) + minimumSeedIndex,
                                                         lower,

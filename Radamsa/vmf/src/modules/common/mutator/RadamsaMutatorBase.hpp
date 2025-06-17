@@ -1,57 +1,45 @@
 /* =============================================================================
- * Vader Modular Fuzzer (VMF)
- * Copyright (c) 2021-2024 The Charles Stark Draper Laboratory, Inc.
+ * Vader Modular Fuzzer
+ * Copyright (c) 2021-2023 The Charles Stark Draper Laboratory, Inc.
  * <vmf@draper.com>
- *  
+ *
  * Effort sponsored by the U.S. Government under Other Transaction number
  * W9124P-19-9-0001 between AMTC and the Government. The U.S. Government
- * Is authorized to reproduce and distribute reprints for Governmental purposes
+ * is authorized to reproduce and distribute reprints for Governmental purposes
  * notwithstanding any copyright notation thereon.
- *  
+ *
  * The views and conclusions contained herein are those of the authors and
  * should not be interpreted as necessarily representing the official policies
  * or endorsements, either expressed or implied, of the U.S. Government.
- *  
+ *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 (only) as 
- * published by the Free Software Foundation.
- *  
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *  
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *  
- * @license GPL-2.0-only <https://spdx.org/licenses/GPL-2.0-only.html>
+ *
+ * @license GPL-3.0-or-later <https://spdx.org/licenses/GPL-3.0-or-later>
  * ===========================================================================*/
 #pragma once
 
-#include "MutatorModule.hpp"
-#include "StorageEntry.hpp"
-#include "RuntimeException.hpp"
-#include "RadamsaByteMutatorBase.hpp"
+// C++ Includes
+#include <random>
+#include <algorithm>
+#include <iostream>
 #include "VmfRand.hpp"
 
 namespace vmf
 {
-/**
- *
- */
-class RadamsaDecrementByteMutator: public MutatorModule, public RadamsaByteMutatorBase
+class RadamsaMutatorBase
 {
-    public:
-
-        static Module* build(std::string name);
-        virtual void init(ConfigInterface& config);
-
-        RadamsaDecrementByteMutator(std::string name);
-        virtual ~RadamsaDecrementByteMutator();
-        virtual void registerStorageNeeds(StorageRegistry& registry);
-        virtual void mutateTestCase(StorageModule& storage, StorageEntry* baseEntry, StorageEntry* newEntry, int testCaseKey);
-
-    private:
-        VmfRand* rand = VmfRand::getInstance();
+public:
+    // universal helper functions go here
 };
 }

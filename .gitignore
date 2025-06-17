@@ -16,3 +16,4 @@ classes/
 build/
 targets/
 .vscode/
+*.swp

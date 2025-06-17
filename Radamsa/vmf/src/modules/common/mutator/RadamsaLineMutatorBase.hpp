@@ -27,52 +27,18 @@
  *
  * @license GPL-3.0-or-later <https://spdx.org/licenses/GPL-3.0-or-later>
  * ===========================================================================*/
+
 #pragma once
 
-// C/C++ Includes
-#include <memory>
-#include <vector>
+#include "RadamsaMutatorBase.hpp"
+#include "VmfRand.hpp"
 
-// Module Includes
-
-#include "mutationBase.hpp"
-
-// Common Includes
-
-#include "StorageEntry.hpp"
-#include "RuntimeException.hpp"
-
-
-namespace vmf::radamsa::mutations
+namespace vmf
 {
 /**
- * @brief This module is draws heavily upon the libAFL mutator.c
- * 
- * Uses the specified AFL-style mutation algorithm to mutate the provided
- * input.  createTestCase is the main mutation method.
  *
- * See https://github.com/AFLplusplus/LibAFL-legacy/blob/dev/src/mutator.c
- * 
- * The following includes code copied from the LibAFL_Legacy repository.
- * 
- *       american fuzzy lop++ - fuzzer header
- *  ------------------------------------
- *  Originally written by Michal Zalewski
- *  Now maintained by Marc Heuse <mh@mh-sec.de>,
- *                    Heiko Eißfeldt <heiko.eissfeldt@hexco.de>,
- *                    Andrea Fioraldi <andreafioraldi@gmail.com>,
- *                    Dominik Maier <mail@dmnk.co>
- *  Copyright 2016, 2017 Google Inc. All rights reserved.
- *  Copyright 2019-2020 AFLplusplus Project. All rights reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at:
- *    http://www.apache.org/licenses/LICENSE-2.0
- *  This is the Library based on AFL++ which can be used to build
- *  customized fuzzers for a specific target while taking advantage of
- *  a lot of features that AFL++ already provides.
  */
-class LineMutations: public vmf::radamsa::mutations::MutationBase
+class RadamsaLineMutatorBase: public RadamsaMutatorBase
 {
 public:
     struct Line
@@ -86,8 +52,12 @@ public:
         Line& operator=(Line&&) = default;
         Line& operator=(const Line&) = default;
 
-        bool operator==(const Line &other) const { return (IsValid == other.IsValid && StartIndex == other.StartIndex && Size == other.Size); }
-        bool operator!=(const Line &other) const { return !(*this == other); }
+        bool operator==(const Line &other) const { 
+            return (IsValid == other.IsValid && 
+                    StartIndex == other.StartIndex && 
+                    Size == other.Size); 
+        }
+        bool operator!=(const Line &other) const { return !(*this == other); } // we may want to change this to test for equality instead of identity
 
         bool IsValid{false};
         size_t StartIndex{0u};
@@ -171,9 +141,12 @@ public:
             return *this;
         }
 
-        bool operator==(const LineVector &other) const { return (Size == other.Size && (memcmp(Data.get(), other.Data.get(), other.Size) == 0)); }
+        bool operator==(const LineVector &other) const { 
+            return (Size == other.Size && 
+                    (memcmp(Data.get(), other.Data.get(), other.Size) == 0)); 
+        }
 
-        bool operator!=(const LineVector &other) const { return !(*this == other); }
+        bool operator!=(const LineVector &other) const { return !(*this == other); } // we may want to change this to test for equality instead of identity
 
         std::unique_ptr<char[]> Data{nullptr};
         size_t Size{0u};
@@ -196,10 +169,7 @@ public:
             {
                 const Line& line{lineData.at(it)};
 
-                data[it] = std::move(
-                                LineVector{
-                                        buffer,
-                                        line});
+                data[it] = std::move(LineVector{buffer,line});
 
                 Capacity += line.Size;
             }
@@ -220,7 +190,9 @@ public:
             Data = std::make_unique<LineVector[]>(numberOfElements);
 
             for (size_t it{0u}; it < numberOfElements; ++it)
+            {
                 Data[it] = other.Data[it];
+            }
         }
 
         LineList(LineList&& other) noexcept
@@ -297,25 +269,26 @@ public:
         bool operator==(const LineList& other) const
         {
             auto compareLineVectors{
-                                [&](const LineVector* const lhs, const LineVector* const rhs) -> bool
-                                {
-                                    if (lhs != nullptr && rhs != nullptr)
-                                    {
-                                        for (size_t it{0u}; it < lhs->Size; ++it)
-                                            if (lhs->Data[it] != rhs->Data[it])
-                                                return false;
+                [&](const LineVector* const lhs, const LineVector* const rhs) -> bool
+                {
+                    if (lhs != nullptr && rhs != nullptr)
+                    {
+                        for (size_t it{0u}; it < lhs->Size; ++it)
+                            if (lhs->Data[it] != rhs->Data[it])
+                                return false;
 
-                                        return true;
-                                    }
-                                    else if (lhs == nullptr && rhs == nullptr)
-                                    {
-                                        return true;
-                                    }
-                                    else
-                                    {
-                                        return false;
-                                    }
-                                }};
+                        return true;
+                    }
+                    else if (lhs == nullptr && rhs == nullptr)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            };
 
             return ((NumberOfElements == other.NumberOfElements) &&
                     (Capacity == other.Capacity) &&
@@ -329,85 +302,173 @@ public:
         size_t Capacity{0u};
     };
 
-    LineMutations() = delete;
-    virtual ~LineMutations() = default;
-
-    void DeleteLine(
-                StorageEntry* newEntry,
-                const size_t originalSize,
-                const char* originalBuffer,
-                const size_t characterIndex,
-                const int testCaseKey);
-  
-    void DeleteSequentialLines(
-                            StorageEntry* newEntry,
-                            const size_t originalSize,
-                            const char* originalBuffer,
-                            const size_t characterIndex,
-                            const int testCaseKey);
-
-    void DuplicateLine(
-                    StorageEntry* newEntry,
-                    const size_t originalSize,
-                    const char* originalBuffer,
-                    const size_t characterIndex,
-                    const int testCaseKey);
-
-    void CopyLineCloseBy(
-                    StorageEntry* newEntry,
-                    const size_t originalSize,
-                    const char* originalBuffer,
-                    const size_t characterIndex,
-                    const int testCaseKey);
-
-    void RepeatLine(
-                StorageEntry* newEntry,
-                const size_t originalSize,
-                const char* originalBuffer,
-                const size_t characterIndex,
-                const int testCaseKey);
-
-    void SwapLine(
-            StorageEntry* newEntry,
-            const size_t originalSize,
-            const char* originalBuffer,
-            const size_t characterIndex,
-            const int testCaseKey);
-
-protected:
-    LineMutations(std::default_random_engine& randomNumberGenerator) : MutationBase{randomNumberGenerator} {}
+    RadamsaLineMutatorBase() = default;
+    virtual ~RadamsaLineMutatorBase() = default;
 
     Line GetLineData(
-                const char* const buffer,
-                const size_t size,
-                const size_t lineIndex,
-                const size_t numberOfLinesAfterIndex);
+                     const char* const buffer,
+                     const size_t size,
+                     const size_t lineIndex,
+                     const size_t numberOfLinesAfterIndex)
+    {
+        constexpr size_t minimumSize{1u};
 
-    bool IsBinarish(
-                const char* const buffer,
-                const size_t size);
+        if (size < minimumSize)
+            throw RuntimeException{"The buffer's minimum size must be greater than or equal to 1", RuntimeException::USAGE_ERROR};
+
+        if (buffer == nullptr)
+            throw RuntimeException{"Input buffer is null", RuntimeException::UNEXPECTED_ERROR};
+
+        const size_t totalNumberOfLines{
+                                    GetNumberOfLinesAfterIndex(
+                                                            buffer,
+                                                            size,
+                                                            0u)};
+
+        if (lineIndex > totalNumberOfLines - 1u)
+            throw RuntimeException{"Line index exceeds the maximum number of lines", RuntimeException::UNEXPECTED_ERROR};
+
+        if (numberOfLinesAfterIndex > totalNumberOfLines)
+            throw RuntimeException{"Number of lines after index exceeds the maximum number of lines", RuntimeException::UNEXPECTED_ERROR};
+
+        const size_t lineOffset{totalNumberOfLines - numberOfLinesAfterIndex};
+
+        constexpr size_t lower{0u};
+        const size_t upper{totalNumberOfLines - 1u};
+        const size_t maximumLineIndex{
+                                std::clamp(
+                                        lineIndex + lineOffset,
+                                        lower,
+                                        upper)};
+
+        Line lineData;
+
+        for(size_t it{0u}, reverseLineIndex{maximumLineIndex}; it < size; ++it)
+        {
+            if(reverseLineIndex == 0u)
+            {
+                if(!lineData.IsValid)
+                {
+                    lineData.StartIndex = it;
+                    lineData.IsValid = true;
+                }
+
+                ++lineData.Size;
+
+                if(buffer[it] == '\n')
+                    break;
+            }
+            else
+            {
+                if(buffer[it] == '\n')
+                    --reverseLineIndex;
+            }
+        }
+
+        return lineData;
+    }
 
     size_t GetNumberOfLinesAfterIndex(
-                                const char* const buffer,
-                                const size_t size,
-                                const size_t index);
+                                      const char* const buffer,
+                                      const size_t size,
+                                      const size_t index)
+    {
+        constexpr size_t minimumSize{1u};
 
-    size_t GetRandomLogValue(const size_t maximumValue);
+        if (size < minimumSize)
+            throw RuntimeException{"The buffer's minimum size must be greater than or equal to 1", RuntimeException::USAGE_ERROR};
 
-    size_t GetRandomN_Bit(const size_t n);
+        if (index > size - 1u)
+            throw RuntimeException{"Index is out of bounds", RuntimeException::INDEX_OUT_OF_RANGE};
 
-private:
-    // Experimental and to be implemented in the next release cycle.
+        if (buffer == nullptr)
+            throw RuntimeException{"Input buffer is null", RuntimeException::UNEXPECTED_ERROR};
 
-    void PermuteLine(
-                StorageEntry* newEntry,
-                const size_t originalSize,
-                const char* originalBuffer,
-                const size_t characterIndex,
-                const int testCaseKey);
+        size_t numberOfLines{0u};
 
-    bool Rad_LineInsElsewhere(const size_t index);
+        for(size_t it{index}; it < size; ++it)
+            if(buffer[it] == '\n')
+                ++numberOfLines;
 
-    bool Rad_LineReplaceElsewhere(const size_t index);
+        return numberOfLines;
+    }
+
+
+    size_t GetRandomRepetitionLength(VmfRand* rand) noexcept
+    {
+        constexpr size_t MINIMUM_UPPER_LIMIT{0x2u};
+        constexpr size_t MAXIMUM_UPPER_LIMIT{0x20000u};
+
+        size_t randomStop{rand->randBetween(0u, MINIMUM_UPPER_LIMIT)};
+        size_t randomUpperLimit{MINIMUM_UPPER_LIMIT};
+
+        while(randomStop != 0u)
+        {
+            if(randomUpperLimit == MAXIMUM_UPPER_LIMIT)
+                break;
+
+            randomUpperLimit <<= 1u;
+            randomStop = rand->randBetween(0u, MINIMUM_UPPER_LIMIT);
+        }
+
+        return rand->randBetween(0u, randomUpperLimit) + 1u; // We add one to the return value in order to account for the case where the random upper value is zero.
+    }
+
+    bool IsBinarish(
+                    const char* const buffer,
+                    const size_t size)
+{
+    constexpr size_t minimumSize{1u};
+
+    if (size < minimumSize)
+        throw RuntimeException{"The buffer's minimum size must be greater than or equal to 1", RuntimeException::USAGE_ERROR};
+
+    if (buffer == nullptr)
+        throw RuntimeException{"Input buffer is null", RuntimeException::UNEXPECTED_ERROR};
+
+    constexpr size_t binarishPeekSize{8u};
+
+    for(size_t it{0}; it < binarishPeekSize; ++it)
+    {
+        // Peek into the data and return true if it contains UTF-8 or \0.
+
+        if(it == size)
+            break;
+
+        if(buffer[it] == '\0')
+            return true;
+
+        if((buffer[it] & (std::numeric_limits<char>::max() + 0x01)) != 0u)
+            return true;
+    }
+
+    return false;
+}
+
+    size_t GetRandomLogValue(const size_t maximumValue, VmfRand* rand)
+    {
+        constexpr size_t minimumValue{2u};
+
+        if(maximumValue <= minimumValue)
+            return 0u;
+
+        return GetRandomN_Bit(
+                            rand->randBetween(0u, maximumValue - minimumValue) + minimumValue,
+                            rand);
+    }
+
+    size_t GetRandomN_Bit(const size_t n, VmfRand* rand)
+    {
+        const size_t highValue{(n - 1u) << 1u};
+        const size_t randomValue{rand->randBetween(0u, highValue)};
+        const size_t nBitValue{randomValue | highValue};
+
+        return nBitValue;
+    }
+
+    void PermuteLine()
+    {
+        //TODO
+    }
 };
 }

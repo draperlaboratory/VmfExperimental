@@ -40,6 +40,12 @@ add_library(Radamsa SHARED
   common/mutator/RadamsaIncrementByteMutator.cpp
   common/mutator/RadamsaDecrementByteMutator.cpp
   common/mutator/RadamsaRandomizeByteMutator.cpp
+  common/mutator/RadamsaDeleteLineMutator.cpp
+  common/mutator/RadamsaDeleteSequentialLinesMutator.cpp
+  common/mutator/RadamsaDuplicateLineMutator.cpp
+  common/mutator/RadamsaCopyLineCloseByMutator.cpp
+  common/mutator/RadamsaRepeatLineMutator.cpp
+  common/mutator/RadamsaSwapLineMutator.cpp
 )
 
 # Build-time dependencies for Radamsa
