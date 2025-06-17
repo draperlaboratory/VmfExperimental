@@ -188,14 +188,14 @@ private:
         vector<Byte> out;
         out.reserve(repeatCount * 8);
         for (int i = 0; i < repeatCount; ++i) {
-            const vector<Byte>& s = sillyStrings[rand->randBetween(0, sillyStrings.size() - 1)];
+            const vector<Byte>& s = sillyStrings[rand->randBetween(0, int(sillyStrings.size() - 1))];
             out.insert(out.end(), s.begin(), s.end());
         }
         return out;
     }
 
     void mutateTextData(vector<Byte>& data, VmfRand* rand) {
-        size_t byteIndex = rand->randBetween(0, data.size());
+        size_t byteIndex = rand->randBetween(0, int(data.size()));
         int mutationType = rand->randBetween(0, 2);
         switch (mutationType) {
             case 0: {
@@ -273,11 +273,11 @@ public:
         }
         if(textChunkIndices.empty()) return;
 
-        const size_t chunkIndex = rand->randBetween(0, textChunkIndices.size() - 1);
+        const size_t chunkIndex = rand->randBetween(0, int(textChunkIndices.size() - 1));
         vector<Text>& textElems = get<vector<Text>>(
             chunks[textChunkIndices[chunkIndex]].value
         );
-        const size_t elemIndex = rand->randBetween(0, textElems.size() - 1);    
+        const size_t elemIndex = rand->randBetween(0, int(textElems.size() - 1));    
         textElems[elemIndex].mutate(rand);
 
         return;

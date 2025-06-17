@@ -23,7 +23,8 @@ RUN  apt-get update \
        python3-pip \
        python3-setuptools \
        build-essential \
-       cmake
+       cmake \
+       libyaml-cpp-dev
 
 ENV  LLVM_CONFIG=llvm-config-16
 
@@ -46,7 +47,6 @@ RUN set -ex \
     && cd /usr/local/src \
     && git clone https://github.com/draperlaboratory/vadermodularfuzzer.git VaderModularFuzzer\
     && cd VaderModularFuzzer \
-    && git checkout 4a8b07b6fb4b53ee11f6dee0c0a67d1d4ec7c38d \
     && mkdir -p build \
     && cd build \
     && cmake .. \

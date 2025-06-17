@@ -88,7 +88,7 @@ void MyMutator::registerStorageNeeds(StorageRegistry& registry)
  * @param testCaseKey the field to write to in the new entry
  * @throws RuntimeException if baseEntry has an empty test case buffer.
  */
-StorageEntry* MyMutator::createTestCase(StorageModule& storage, StorageEntry* baseEntry)
+void MyMutator::mutateTestCase(StorageModule& storage, StorageEntry* baseEntry, StorageEntry* newEntry, int testCaseKey)
 {
     int inputSize = baseEntry->getBufferSize(testCaseKey);
 

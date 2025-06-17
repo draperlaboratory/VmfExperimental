@@ -96,5 +96,6 @@ target_link_libraries(VmfTest
   CoreModules
   Threads::Threads
   Radamsa
+  yaml-cpp
 )
 gtest_discover_tests(VmfTest)

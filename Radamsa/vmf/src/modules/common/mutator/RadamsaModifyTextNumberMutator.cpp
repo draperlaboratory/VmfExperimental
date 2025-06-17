@@ -117,7 +117,7 @@ void RadamsaModifyTextNumberMutator::mutateTestCase(StorageModule& storage, Stor
         throw RuntimeException{"The amount of ASCII numbers must be greater than or equal 1", RuntimeException::USAGE_ERROR};
     }
 
-    NumInfo toMutate = dataNums[this->rand->randBetween(0, dataNums.size() - 1)];
+    NumInfo toMutate = dataNums[this->rand->randBetween(0, int(dataNums.size() - 1))];
 
     const vector<unsigned int> interestingNums = this->generateInterestingNumbers();
     unsigned int newValue;
@@ -134,15 +134,15 @@ void RadamsaModifyTextNumberMutator::mutateTestCase(StorageModule& storage, Stor
         case 5:
         case 6:
             newValue = interestingNums[
-                this->rand->randBetween(0, interestingNums.size() - 1)
+                this->rand->randBetween(0, int(interestingNums.size() - 1))
             ]; break;
         case 7:
             newValue = toMutate.value + interestingNums[
-                this->rand->randBetween(0, interestingNums.size() - 1)
+                this->rand->randBetween(0, int(interestingNums.size() - 1))
             ]; break;
         case 8: {
             unsigned int val = interestingNums[
-                this->rand->randBetween(0, interestingNums.size() - 1)
+                this->rand->randBetween(0, int(interestingNums.size() - 1))
             ];
             newValue = (toMutate.value > val) ? toMutate.value - val : 0;
             break;

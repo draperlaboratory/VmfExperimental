@@ -201,8 +201,8 @@ public:
     ) {
         if (a.empty() || b.empty()) return nullopt;
 
-        size_t aIndex = rand->randBetween(0, a.size() - 1); // -1 because randBetween is max inclusive
-        size_t bIndex = rand->randBetween(0, b.size() - 1);
+        size_t aIndex = rand->randBetween(0, int(a.size() - 1)); // -1 because randBetween is max inclusive
+        size_t bIndex = rand->randBetween(0, int(b.size() - 1));
         vector<T> aElem = a[aIndex];
         vector<T> bElem = b[bIndex];
         return pair<vector<T>, vector<T>>(aElem, bElem);
