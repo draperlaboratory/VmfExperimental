@@ -1,17 +1,8 @@
 #===============================================================================
 # Vader Modular Fuzzer (VMF)
-# Copyright (c) 2021-2023 The Charles Stark Draper Laboratory, Inc.
-# <vader@draper.com>
-#  
-# Effort sponsored by the U.S. Government under Other Transaction number
-# W9124P-19-9-0001 between AMTC and the Government. The U.S. Government
-# Is authorized to reproduce and distribute reprints for Governmental purposes
-# notwithstanding any copyright notation thereon.
-#  
-# The views and conclusions contained herein are those of the authors and
-# should not be interpreted as necessarily representing the official policies
-# or endorsements, either expressed or implied, of the U.S. Government.
-#  
+# Copyright (c) 2021-2025 The Charles Stark Draper Laboratory, Inc.
+# <vmf@draper.com>
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 (only) as 
 # published by the Free Software Foundation.
@@ -29,9 +20,6 @@
 
 # Create Radamsa library
 add_library(Radamsa SHARED
-#  common/mutator/byteMutations.cpp
-#  common/mutator/radamsaMutator.cpp
-#  common/mutator/lineMutations.cpp
   common/mutator/RadamsaDropByteMutator.cpp
   common/mutator/RadamsaFlipByteMutator.cpp
   common/mutator/RadamsaInsertByteMutator.cpp
@@ -46,7 +34,32 @@ add_library(Radamsa SHARED
   common/mutator/RadamsaCopyLineCloseByMutator.cpp
   common/mutator/RadamsaRepeatLineMutator.cpp
   common/mutator/RadamsaSwapLineMutator.cpp
+  common/mutator/RadamsaRepeatByteSequenceMutator.cpp       # -sr
+  common/mutator/RadamsaDeleteByteSequenceMutator.cpp       # -sd
+  common/mutator/RadamsaPermuteLinesMutator.cpp             # -lp
+  common/mutator/RadamsaInsertLineMutator.cpp               # -lis
+  common/mutator/RadamsaReplaceLineMutator.cpp              # -lrs
+  common/mutator/RadamsaDeleteNodeMutator.cpp               # -td
+  common/mutator/RadamsaDuplicateNodeMutator.cpp            # -tr2
+  common/mutator/RadamsaReplaceNodeMutator.cpp              # -ts1
+  common/mutator/RadamsaSwapNodesMutator.cpp                # -ts2
+  common/mutator/RadamsaRepeatPathMutator.cpp               # -tr
+  common/mutator/RadamsaWidenCodePointMutator.cpp           # -uw
+  common/mutator/RadamsaInsertUnicodeMutator.cpp            # -ui
+  common/mutator/RadamsaModifyTextNumberMutator.cpp         # -num
+  common/mutator/RadamsaFuseThisMutator.cpp                 # -ft
+  common/mutator/RadamsaFuseNextMutator.cpp                 # -fn
+  common/mutator/RadamsaFuseOldMutator.cpp                  # -fo
+  common/mutator/RadamsaAsciiBadMutator.cpp                 # -ab
 )
+
+#Set flag to export all symbols for windows builds
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+# windows needs an additional import to make the logger work
+if(WIN32)
+   target_compile_definitions(Radamsa PRIVATE PLOG_IMPORT)
+endif()
 
 # Build-time dependencies for Radamsa
 link_directories(Radamsa PRIVATE
@@ -54,17 +67,25 @@ link_directories(Radamsa PRIVATE
 
 # Build-time dependencies for Radamsa
 target_link_libraries(Radamsa PRIVATE
+	vmf_framework
 )
 
 # Build-time dependencies for Radamsa
 target_include_directories(Radamsa PRIVATE
-  ${VMF_INSTALL}/include
-  ${VMF_INSTALL}/include/vmf
-  ${VMF_INSTALL}/include/plog
+  ${CMAKE_INSTALL_PREFIX}/include
+  ${CMAKE_INSTALL_PREFIX}/include/vmf
+  ${CMAKE_INSTALL_PREFIX}/include/plog
   ${PROJECT_SOURCE_DIR}/src/module
 )
 
 # Install Radamsa library in VMF plugins directory
 install(TARGETS Radamsa
-  LIBRARY DESTINATION "${VMF_INSTALL}/plugins")
+  LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/plugins")
 
+#On windows the /plugins directory above is ignored, and everything ends up in /lib and /bin
+if(WIN32)
+  cmake_path(SET WIN_LIB_FILE ${CMAKE_INSTALL_PREFIX}/lib/Radamsa.lib)
+  cmake_path(SET WIN_DLL_FILE ${CMAKE_INSTALL_PREFIX}/bin/Radamsa.dll)
+  install(FILES ${WIN_LIB_FILE} ${WIN_DLL_FILE}
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/plugins)
+endif()

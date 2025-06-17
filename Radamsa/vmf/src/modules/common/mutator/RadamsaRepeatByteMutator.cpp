@@ -110,7 +110,7 @@ void RadamsaRepeatByteMutator::mutateTestCase(StorageModule& storage, StorageEnt
     // The new buffer size will contain a random number of additional elements since we are repeating a random byte.
     // Furthermore, it will contain one more element since we are appending a null-terminator to the end.
 
-    const size_t numberOfRandomByteRepetitions{GetRandomByteRepetitionLength(rand)};
+    const size_t numberOfRandomByteRepetitions{GetRandomRepetitionLength(rand)};
     const size_t newBufferSize{originalSize + numberOfRandomByteRepetitions + 1u};
 
     // Allocate the new buffer and set it's elements to zero.
