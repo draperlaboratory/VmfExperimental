@@ -13,26 +13,36 @@ vmfModules:
         - className: StatsOutput
   GeneticAlgorithmInputGenerator:
       children:
-        - className: AFLFlipBitMutator
-        - className: AFLFlip2BitMutator
-        - className: AFLFlip4BitMutator
-        - className: AFLFlipByteMutator
-        - className: AFLFlip2ByteMutator
-        - className: AFLFlip4ByteMutator
-        - className: AFLRandomByteAddSubMutator
-        - className: AFLRandomByteMutator
-        - className: AFLDeleteMutator
-        - className: AFLCloneMutator
-        - className: AFLSpliceMutator
-
-        - className: RadamsaDropByteMutator
-        - className: RadamsaFlipByteMutator
-        - className: RadamsaInsertByteMutator
-        - className: RadamsaRepeatByteMutator
-        - className: RadamsaPermuteByteMutator
-        - className: RadamsaIncrementByteMutator
+        - className: RadamsaCopyLineCloseByMutator
         - className: RadamsaDecrementByteMutator
+        - className: RadamsaDeleteByteSequenceMutator
+        - className: RadamsaDeleteLineMutator
+        - className: RadamsaDeleteNodeMutator
+        - className: RadamsaDeleteSequentialLinesMutator
+        - className: RadamsaDropByteMutator
+        - className: RadamsaDuplicateLineMutator
+        # - className: RadamsaDuplicateNodeMutator
+        - className: RadamsaFlipByteMutator
+        - className: RadamsaFuseNextMutator
+        - className: RadamsaFuseOldMutator
+        - className: RadamsaFuseThisMutator
+        - className: RadamsaIncrementByteMutator
+        - className: RadamsaInsertByteMutator
+        # - className: RadamsaInsertLineMutator
+        - className: RadamsaInsertUnicodeMutator
+        # - className: RadamsaModifyTextNumberMutator
+        - className: RadamsaPermuteByteMutator
+        # - className: RadamsaPermuteLinesMutator
         - className: RadamsaRandomizeByteMutator
+        - className: RadamsaRepeatByteMutator
+        - className: RadamsaRepeatByteSequenceMutator
+        - className: RadamsaRepeatLineMutator
+        # - className: RadamsaRepeatPathMutator
+        # - className: RadamsaReplaceLineMutator
+        # - className: RadamsaReplaceNodeMutator
+        # - className: RadamsaSwapLineMutator
+        # - className: RadamsaSwapNodesMutator
+        # - className: RadamsaWidenCodePointMutator
 
 # Modules-specific parameters
 #(The SUT-specific portions of these all defined using YAML anchors)

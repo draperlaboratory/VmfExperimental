@@ -66,11 +66,12 @@ RUN set -ex \
     && make install \
     && set +ex
 
-# # Create experimental config file
-# RUN set -ex \
-#     && cd /usr/local/test/config \
-#     && cp /usr/local/src/VmfExperimental/Radamsa/test/config/experimentalModules.yaml /usr/local/test/config/ \
-#     && set +ex
+# Create experimental config file
+RUN set -ex \
+    && cd /usr/local/src/ \
+    && cp VmfExperimental/Radamsa/test/config/experimentalModules.yaml VaderModularFuzzer/build/vmf_install/test/config/experimentalModules.yaml \
+    && set +ex
 
-WORKDIR /usr/local/src/VmfExperimental/build
-ENTRYPOINT [ "ctest", "--output-on-failure" ]
+# WORKDIR /usr/local/src/VmfExperimental/build
+WORKDIR /usr/local/src/VaderModularFuzzer/build/vmf_install
+ENTRYPOINT [ "./bin/vader", "-c", "test/config/experimentalModules.yaml", "-c", "test/haystackSUT/haystack_stdin.yaml" ]
