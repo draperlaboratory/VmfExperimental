@@ -43,7 +43,6 @@ using std::holds_alternative;
 using std::string;
 using std::variant;
 
-
 #include "ModuleFactory.hpp"
 REGISTER_MODULE(RadamsaAsciiBadMutator);
 

@@ -69,7 +69,7 @@ RUN set -ex \
 # Create experimental config file
 RUN set -ex \
     && cd /usr/local/src/ \
-    && cp VmfExperimental/Radamsa/test/config/experimentalModules.yaml VaderModularFuzzer/build/vmf_install/test/config/experimentalModules.yaml \
+    && cp VmfExperimental/test/config/experimentalModules.yaml VaderModularFuzzer/build/vmf_install/test/config/experimentalModules.yaml \
     && set +ex
 
 # WORKDIR /usr/local/src/VmfExperimental/build

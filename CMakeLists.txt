@@ -63,6 +63,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/test)
 
 # Add in extension package directories
 add_subdirectory(${PROJECT_SOURCE_DIR}/Determinism)
+add_subdirectory(${PROJECT_SOURCE_DIR}/AFLPlusPlus)
 add_subdirectory(${PROJECT_SOURCE_DIR}/Radamsa)
 #add_subdirectory(${PROJECT_SOURCE_DIR}/SamplePackage)
 
