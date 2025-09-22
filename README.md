@@ -6,6 +6,14 @@ This repository is a collection of VMF module packages (sets of related modules)
 Top-level directories are individual packages. Each package contains source code for one or more VMF
 modules along with associated data, tests, and documentation.
 
+| Package Name  | Description  | Last Updated  | Compatible With  | Developer Contact  |
+| ------------  | -----------  | ------------  | ---------------  | -----------------  |
+| Determinism  | These modules provide support for deterministic VMF runs and determinism validation  | 2025-03-18  | VMF v5.1.0 | Draper (vmf@draper.com) |
+| Radamsa  | Partial implementation of mutators from the [Radamsa](https://gitlab.com/akihe/radamsa) fuzzer | 2025-03-18  | VMF v5.1.0 | Draper (vmf@draper.com) |
+| SamplePackage  | This sample shows how to write a mutator module and set up your build process to integrate with VMF | 2025-03-18  | NA  | Draper (vmf@draper.com) |
+
+## Organization
+
 Within each package we suggest using the same directory hierarchy as is used in the main 
 VaderModularFuzzer repository:
 * All source code is under `vmf/src/modules/`
