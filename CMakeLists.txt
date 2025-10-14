@@ -38,10 +38,32 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_INSTALL_PREFIX}/cmake")
 include(vmf_imports)
 include(vmf)
 
+# --- VMF workaround patch ---
+# The vmf_framework target imported from the installed VMF tree incorrectly sets:
+#   - INTERFACE_INCLUDE_DIRECTORIES to "/include"
+#   - IMPORTED_LOCATION to "/lib/libVMFFramework.so"
+# These paths are invalid or conflict with the actual installed VMF location.
+# Since VMF cannot be modified directly, we override the target's include path and library location here.
+# This ensures correct compilation and linking against the local VMF install tree.
+get_target_property(_vmf_includes vmf_framework INTERFACE_INCLUDE_DIRECTORIES)
+list(REMOVE_ITEM _vmf_includes "/include")
+list(APPEND _vmf_includes "${CMAKE_INSTALL_PREFIX}/include")
+set_target_properties(vmf_framework PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_vmf_includes}"
+  IMPORTED_LOCATION "${CMAKE_INSTALL_PREFIX}/lib/libVMFFramework.so"
+)
+# -----------------------------
+
+# Configure testing
+include(GoogleTest)
+enable_testing()
+add_subdirectory(${PROJECT_SOURCE_DIR}/test)
+
 # ---- TAILOR SPECIFIC EXTENSION PACKAGES HERE ----
 
 # Add in extension package directories
 add_subdirectory(${PROJECT_SOURCE_DIR}/Determinism)
+add_subdirectory(${PROJECT_SOURCE_DIR}/AFLPlusPlus)
 add_subdirectory(${PROJECT_SOURCE_DIR}/Radamsa)
 #add_subdirectory(${PROJECT_SOURCE_DIR}/SamplePackage)
 

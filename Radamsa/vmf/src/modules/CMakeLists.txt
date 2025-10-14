@@ -20,9 +20,37 @@
 
 # Create Radamsa library
 add_library(Radamsa SHARED
-  common/mutator/byteMutations.cpp
-  common/mutator/radamsaMutator.cpp
-  common/mutator/lineMutations.cpp
+  common/mutator/RadamsaDropByteMutator.cpp
+  common/mutator/RadamsaFlipByteMutator.cpp
+  common/mutator/RadamsaInsertByteMutator.cpp
+  common/mutator/RadamsaRepeatByteMutator.cpp
+  common/mutator/RadamsaPermuteByteMutator.cpp
+  common/mutator/RadamsaIncrementByteMutator.cpp
+  common/mutator/RadamsaDecrementByteMutator.cpp
+  common/mutator/RadamsaRandomizeByteMutator.cpp
+  common/mutator/RadamsaDeleteLineMutator.cpp
+  common/mutator/RadamsaDeleteSequentialLinesMutator.cpp
+  common/mutator/RadamsaDuplicateLineMutator.cpp
+  common/mutator/RadamsaCopyLineCloseByMutator.cpp
+  common/mutator/RadamsaRepeatLineMutator.cpp
+  common/mutator/RadamsaSwapLineMutator.cpp
+  common/mutator/RadamsaRepeatByteSequenceMutator.cpp       # -sr
+  common/mutator/RadamsaDeleteByteSequenceMutator.cpp       # -sd
+  common/mutator/RadamsaPermuteLinesMutator.cpp             # -lp
+  common/mutator/RadamsaInsertLineMutator.cpp               # -lis
+  common/mutator/RadamsaReplaceLineMutator.cpp              # -lrs
+  common/mutator/RadamsaDeleteNodeMutator.cpp               # -td
+  common/mutator/RadamsaDuplicateNodeMutator.cpp            # -tr2
+  common/mutator/RadamsaReplaceNodeMutator.cpp              # -ts1
+  common/mutator/RadamsaSwapNodesMutator.cpp                # -ts2
+  common/mutator/RadamsaRepeatPathMutator.cpp               # -tr
+  common/mutator/RadamsaWidenCodePointMutator.cpp           # -uw
+  common/mutator/RadamsaInsertUnicodeMutator.cpp            # -ui
+  common/mutator/RadamsaModifyTextNumberMutator.cpp         # -num
+  common/mutator/RadamsaFuseThisMutator.cpp                 # -ft
+  common/mutator/RadamsaFuseNextMutator.cpp                 # -fn
+  common/mutator/RadamsaFuseOldMutator.cpp                  # -fo
+  common/mutator/RadamsaAsciiBadMutator.cpp                 # -ab
 )
 
 #Set flag to export all symbols for windows builds

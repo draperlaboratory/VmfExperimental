@@ -5,6 +5,7 @@
 *.obj
 *.*~
 *.exe
+*.swp
 
 # Vader
 */VaderWin/.vs/*

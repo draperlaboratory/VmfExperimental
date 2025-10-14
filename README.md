@@ -34,8 +34,7 @@ VaderModularFuzzer repository:
 
 VMF is built using CMake
 
-Building the Experimental repository also requires an installed instance of VMF. It may be installed
-in a public location like `/usr/local/vmf` or in the default location within a VMF source tree like
+Building the Experimental repository also requires an installed instance of VMF. It must be installed in the default location within a VMF source tree, like
 `/home/userdir/VaderModularFuzzer/build/vmf_install`. Specify the full path to the VMF install using
 `-DCMAKE_INSTALL_PREFIX=/path/to/VMF`.
 
@@ -83,8 +82,38 @@ To install the VMF extension libary, do this in the build directory:
 make install
 ```
 
-
 ## License
 All experimental modules must be license-compatible with VMF itself, which is licensed under the GNU General Public License Version 2.
 
 
+## Unit Tests
+
+VMF uses the Google Test framework for unit testing. A basic overview of the framework as well as example unit test are available here: [Primer](http://google.github.io/googletest/primer.html).
+
+### Running the Unit Tests
+To run the existing unit tests, use the following commands
+```bash
+cd build
+ctest
+```
+
+For additional output on any failed tests
+```bash
+ctest --output-on-failure
+```
+
+For additional output on all of the tests
+```bash
+ctest --VV
+```
+
+To build and run
+```bash
+cmake -DVMF_INSTALL=<path to VMF install> .. && make -j8 && ctest
+```
+
+### Running the Unit Tests (Docker)
+From the VmfExperimental Directory on the HOS, run the following command via Bash / Powershell 7+
+```powershell
+docker build -t vmfexp -f ./dockerfiles/Dockerfile . && docker run --rm vmfexp
+```
